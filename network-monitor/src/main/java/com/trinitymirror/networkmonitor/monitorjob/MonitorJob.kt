@@ -1,0 +1,35 @@
+package com.trinitymirror.networkmonitor.monitorjob
+
+import com.trinitymirror.networkmonitor.NetworkMonitor
+import io.reactivex.Completable
+
+/**
+ * Created by ricardobelchior on 09/11/2017.
+ */
+class MonitorJob(private val thresholdVerifier: ThresholdVerifier) {
+
+    fun execute(): Completable {
+        return Completable.fromAction { executeAsync() }
+    }
+
+    private fun executeAsync() {
+
+        NetworkMonitor.with()
+                .networkListeners
+                .forEach { verifyThreshold(it) }
+    }
+
+    private fun verifyThreshold(listener: NetworkMonitor.UsageListener) {
+        val result = thresholdVerifier.isThresholdReached(listener)
+        if (result.isThresholdReached) {
+            listener.callback.onMaxBytesReached(result.reason)
+        }
+
+
+    }
+
+
+    // TODO WHEN TO NOTIFY AND NOT NOTIFY ???
+
+
+}
