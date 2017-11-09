@@ -6,14 +6,14 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobTrigger
 import com.trinitymirror.networkmonitor.monitorjob.MonitorJobFactory
-import com.trinitymirror.networkmonitor.stats.NetworkStats
+import com.trinitymirror.networkmonitor.monitorjob.ThresholdVerifier
+import com.trinitymirror.networkmonitor.monitorjob.ThresholdVerifierCompat
 
 @SuppressLint("StaticFieldLeak")
 object NetworkMonitorServiceLocator {
 
     internal lateinit var context: Context
 
-    private var networkStats: NetworkStats? = null
     private var monitorJobFactory: MonitorJobFactory? = null
     private var jobExecutionPeriodicity = -1
     private var jobExecutionTolerance = -1
@@ -34,8 +34,12 @@ object NetworkMonitorServiceLocator {
         }
     }
 
-    internal fun provideNetworkStats(): NetworkStats {
-        TODO("")
+    fun provideUsageCallbackRegister(): UsageCallbackRegister {
+        return UsageCallbacksCompat(context)
+    }
+
+    fun provideThresholdVerifier(): ThresholdVerifier {
+        return ThresholdVerifierCompat(context)
     }
 
     class Config(context: Context) {

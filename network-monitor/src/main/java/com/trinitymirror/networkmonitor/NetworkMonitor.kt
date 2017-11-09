@@ -1,59 +1,32 @@
 package com.trinitymirror.networkmonitor
 
-import android.app.usage.NetworkStatsManager
-import android.content.Context
 import com.trinitymirror.networkmonitor.monitorjob.MonitorJobFactory
-import com.trinitymirror.networkmonitor.stats.NetworkStats
+import com.trinitymirror.networkmonitor.monitorjob.ThresholdVerifier
 
 /**
  * Created by ricardobelchior on 09/11/2017.
  */
 class NetworkMonitor private constructor(
-        private val context: Context,
-        private val networkStats: NetworkStats,
+        private val usageCallbacks: UsageCallbackRegister,
         monitorJobFactory: MonitorJobFactory) {
 
     internal val networkListeners = mutableListOf<UsageListener>()
-    internal val usageCallbacksList = mutableListOf<NetworkStatsManager.UsageCallback>()
 
     init {
         monitorJobFactory.scheduleJob()
     }
 
     fun registerListener(listener: UsageListener) {
-        networkStats.registerUsageCallback(listener)
+        usageCallbacks.registerUsageCallback(listener)
         networkListeners.add(listener)
     }
 
-//    private fun registerUsageCallback(listener: UsageListener) {
-//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-//            return
-//        }
-//
-//        val networkStatsManager = context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager)
-//        val thresholdBytes = listener.params.maxBytesSinceAppRestart
-//
-//        val networkType = if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
-//            ConnectivityManager.TYPE_MOBILE else ConnectivityManager.TYPE_WIFI
-//
-//        val subscriberId = if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
-//            Utils.getSubscriberId(context) else ""
-//
-//        val usageCallback = object : NetworkStatsManager.UsageCallback() {
-//            override fun onThresholdReached(networkType: Int, subscriberId: String?) {
-//                listener.callback.onMaxBytesReached()
-//            }
-//        }
-//
-//        networkStatsManager.registerUsageCallback(networkType, subscriberId, thresholdBytes, )
-//    }
-
     fun unregisterListener(listener: UsageListener) {
-        networkStats.unregisterUsageCallback(listener)
+        usageCallbacks.unregisterUsageCallback(listener)
         networkListeners.remove(listener)
     }
 
-    //TODO isThresholdReached if id is necessary
+
     data class UsageListener(
             val id: Int, val params: Params, val callback: Callback) {
 
@@ -67,7 +40,7 @@ class NetworkMonitor private constructor(
                 val networkType: NetworkType)
 
         interface Callback {
-            fun onMaxBytesReached(reason: Int)
+            fun onMaxBytesReached(result: ThresholdVerifier.Result)
         }
     }
 
@@ -82,8 +55,7 @@ class NetworkMonitor private constructor(
 
         private fun create(): NetworkMonitor {
             return NetworkMonitor(
-                    NetworkMonitorServiceLocator.context,
-                    NetworkMonitorServiceLocator.provideNetworkStats(),
+                    NetworkMonitorServiceLocator.provideUsageCallbackRegister(),
                     NetworkMonitorServiceLocator.provideMonitorJobFactory())
         }
 
