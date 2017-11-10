@@ -28,21 +28,29 @@ interface ThresholdVerifier {
     class BaseThresholdVerifier : ThresholdVerifier {
 
         override fun isThresholdReached(listener: UsageListener): UsageListener.Result? {
-            val bytes = TrafficStatsHelper.uidBytes(Process.myUid())
+            val uid = Process.myUid()
+            val bytes = TrafficStatsHelper.uidBytes(uid)
 
             return if (isThresholdReached(bytes, listener)) {
-                UsageListener.Result(0, UsageListener.Result.Extras(0, 0, 0, 0))
+                UsageListener.Result(
+                        UsageListener.ResultCode.MAX_BYTES_SINCE_DEVICE_BOOT,
+                        UsageListener.Result.Extras(
+                                -1, -1, -1, -1,
+                                TrafficStatsHelper.uidRxBytes(uid),
+                                TrafficStatsHelper.uidTxBytes(uid)))
             } else {
                 null
             }
         }
 
         private fun isThresholdReached(bytes: Long, listener: UsageListener) =
-                bytes > listener.params.maxBytesSinceDeviceReboot
+                bytes > listener.params.maxBytesSinceDeviceBoot
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     class MarshmallowThresholdVerifier(private val context: Context) : ThresholdVerifier {
+
+        private val uid = Process.myUid()
 
         private val networkStatsHelper = NetworkStatsHelper(
                 context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager)
@@ -51,10 +59,27 @@ interface ThresholdVerifier {
             val bytes = queryPackageBytes(listener)
 
             return if (isThresholdReached(bytes, listener)) {
-                UsageListener.Result(0, UsageListener.Result.Extras(0, 0, 0, 0))
+                buildResult(listener)
             } else {
                 null
             }
+        }
+
+        private fun buildResult(listener: UsageListener): UsageListener.Result {
+            val subscriberId = getSubscriberId()
+            val rxMobile = rxMobile(listener, subscriberId)
+            val txMobile = txMobile(listener, subscriberId)
+            val rxWifi = rxWifi(listener)
+            val txWifi = txWifi(listener)
+            val rxBytes = rxMobile + rxWifi
+            val txBytes = txMobile + txWifi
+
+            return UsageListener.Result(
+                    UsageListener.ResultCode.MAX_BYTES_SINCE_LAST_PERIOD,
+                    UsageListener.Result.Extras(
+                            rxMobile, txMobile,
+                            rxWifi, txWifi,
+                            rxBytes, txBytes))
         }
 
         private fun isThresholdReached(bytes: Long, listener: UsageListener) =
@@ -64,12 +89,28 @@ interface ThresholdVerifier {
             return when (listener.params.networkType) {
                 UsageListener.NetworkType.WIFI ->
                     networkStatsHelper.queryPackageBytesWifi(
-                            Process.myUid(), listener.params.periodInMillis)
+                            uid, listener.params.periodInMillis)
 
                 UsageListener.NetworkType.MOBILE ->
                     networkStatsHelper.queryPackageBytesMobile(
-                            Process.myUid(), Utils.getSubscriberId(context), listener.params.periodInMillis)
+                            uid, getSubscriberId(), listener.params.periodInMillis)
             }
         }
+
+        private fun rxMobile(listener: UsageListener, subscriberId: String) =
+                networkStatsHelper.queryPackageRxBytesMobile(
+                        uid, subscriberId, listener.params.periodInMillis)
+
+        private fun txMobile(listener: UsageListener, subscriberId: String) =
+                networkStatsHelper.queryPackageTxBytesMobile(
+                        uid, subscriberId, listener.params.periodInMillis)
+
+        private fun rxWifi(listener: UsageListener) =
+                networkStatsHelper.queryPackageRxBytesWifi(uid, listener.params.periodInMillis)
+
+        private fun txWifi(listener: UsageListener) =
+                networkStatsHelper.queryPackageTxBytesWifi(uid, listener.params.periodInMillis)
+
+        private fun getSubscriberId() = Utils.getSubscriberId(context)
     }
 }

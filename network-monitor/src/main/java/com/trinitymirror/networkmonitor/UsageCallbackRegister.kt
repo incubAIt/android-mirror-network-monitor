@@ -4,8 +4,10 @@ import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
+import android.os.Process
 import android.support.annotation.RequiresApi
 import android.support.v4.util.SparseArrayCompat
+import com.trinitymirror.networkmonitor.stats.NetworkStatsHelper
 import com.trinitymirror.networkmonitor.stats.Utils
 
 /**
@@ -18,18 +20,17 @@ internal interface UsageCallbackRegister {
     fun unregisterUsageCallback(listener: UsageListener)
 
     @RequiresApi(Build.VERSION_CODES.N)
-    open class Nougat(private val context: Context) : UsageCallbackRegister {
+    open class Nougat(private val context: Context, private val networkStatsManager: NetworkStatsManager) : UsageCallbackRegister {
+
+        private val uid = Process.myUid()
+        private val networkStatsHelper = NetworkStatsHelper(networkStatsManager)
         protected val usageCallbacksList = SparseArrayCompat<NetworkStatsManager.UsageCallback>()
 
         override fun registerUsageCallback(listener: UsageListener) {
             val thresholdBytes = listener.params.maxBytesSinceAppRestart
 
-            val networkType = if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
-                ConnectivityManager.TYPE_MOBILE else ConnectivityManager.TYPE_WIFI
-
-            val subscriberId = if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
-                getSubscriberId() else ""
-
+            val networkType = mapNetworkType(listener)
+            val subscriberId = mapSubscriberId(listener)
             val usageCallback = object : NetworkStatsManager.UsageCallback() {
                 override fun onThresholdReached(networkType: Int, subscriberId: String?) {
                     onThresholdReached(listener)
@@ -37,30 +38,64 @@ internal interface UsageCallbackRegister {
             }
             usageCallbacksList.put(listener.id, usageCallback)
 
-            getNetworkStatsManager()
+            networkStatsManager
                     .registerUsageCallback(networkType, subscriberId, thresholdBytes, usageCallback)
         }
 
+        private fun mapSubscriberId(listener: UsageListener) =
+                if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
+                    getSubscriberId() else ""
+
+        private fun mapNetworkType(listener: UsageListener) =
+                if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
+                    ConnectivityManager.TYPE_MOBILE else ConnectivityManager.TYPE_WIFI
+
         open fun onThresholdReached(listener: UsageListener) {
-            //val code = TODO("create code enums")
-            //listener.callback.onMaxBytesReached(code)
+            listener.callback.onMaxBytesReached(buildResult(listener))
 
             // store warning in shared prefs?
             // unregister callback
         }
 
+        private fun buildResult(listener: UsageListener): UsageListener.Result {
+            val subscriberId = getSubscriberId()
+            val rxMobile = rxMobile(listener, subscriberId)
+            val txMobile = txMobile(listener, subscriberId)
+            val rxWifi = rxWifi(listener)
+            val txWifi = txWifi(listener)
+            val rxBytes = rxMobile + rxWifi
+            val txBytes = txMobile + txWifi
+
+            return UsageListener.Result(
+                    UsageListener.ResultCode.MAX_BYTES_SINCE_APP_RESTART,
+                    UsageListener.Result.Extras(
+                            rxMobile, txMobile,
+                            rxWifi, txWifi,
+                            rxBytes, txBytes))
+        }
+
         override fun unregisterUsageCallback(listener: UsageListener) {
             val usageCallback = usageCallbacksList.get(listener.id)
-            getNetworkStatsManager()
-                    .unregisterUsageCallback(usageCallback)
+            networkStatsManager.unregisterUsageCallback(usageCallback)
 
             usageCallbacksList.remove(listener.id)
         }
 
-        open fun getSubscriberId() = Utils.getSubscriberId(context)
+        private fun rxMobile(listener: UsageListener, subscriberId: String) =
+                networkStatsHelper.queryPackageRxBytesMobile(
+                        uid, subscriberId, listener.params.periodInMillis)
 
-        open fun getNetworkStatsManager() =
-                context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
+        private fun txMobile(listener: UsageListener, subscriberId: String) =
+                networkStatsHelper.queryPackageTxBytesMobile(
+                        uid, subscriberId, listener.params.periodInMillis)
+
+        private fun rxWifi(listener: UsageListener) =
+                networkStatsHelper.queryPackageRxBytesWifi(uid, listener.params.periodInMillis)
+
+        private fun txWifi(listener: UsageListener) =
+                networkStatsHelper.queryPackageTxBytesWifi(uid, listener.params.periodInMillis)
+
+        open fun getSubscriberId() = Utils.getSubscriberId(context)
     }
 
     class Empty : UsageCallbackRegister {

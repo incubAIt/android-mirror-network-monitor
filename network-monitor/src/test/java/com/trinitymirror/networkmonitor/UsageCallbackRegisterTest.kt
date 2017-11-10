@@ -92,18 +92,12 @@ class UsageCallbackRegisterTest : BaseTest() {
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    internal class UsageCallbackRegisterStub(context: Context, private val statsManager: NetworkStatsManager)
-        : UsageCallbackRegister.Nougat(context) {
+    internal class UsageCallbackRegisterStub(context: Context, statsManager: NetworkStatsManager)
+        : UsageCallbackRegister.Nougat(context, statsManager) {
 
         override fun getSubscriberId(): String {
             return SUBSCRIBER_ID
         }
-
-        override fun getNetworkStatsManager(): NetworkStatsManager {
-            return statsManager
-        }
-
-
 
         fun callbacksList() = usageCallbacksList
     }

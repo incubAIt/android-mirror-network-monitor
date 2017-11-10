@@ -12,10 +12,16 @@ data class UsageListener(
 
     enum class NetworkType { WIFI, MOBILE }
 
+    enum class ResultCode {
+        MAX_BYTES_SINCE_DEVICE_BOOT,
+        MAX_BYTES_SINCE_APP_RESTART,
+        MAX_BYTES_SINCE_LAST_PERIOD
+    }
+
     /**
      * Provides information on when to trigger its corresponding [UsageListener]
      *
-     * @param maxBytesSinceDeviceReboot bytes allowed since the device last rebooted.
+     * @param maxBytesSinceDeviceBoot bytes allowed since the device last rebooted.
      *  Used by [android.net.TrafficStats] `(API < 23)`.
      *
      * @param maxBytesSinceAppRestart bytes allowed since the app restart.
@@ -30,7 +36,7 @@ data class UsageListener(
      * @param networkType Whether the thresholds applies for mobile or wifi.
      */
     data class Params(
-            val maxBytesSinceDeviceReboot: Long,
+            val maxBytesSinceDeviceBoot: Long,
             val maxBytesSinceAppRestart: Long,
             val maxBytesSinceLastPeriod: Long,
             val periodInMillis: Long,
@@ -50,11 +56,23 @@ data class UsageListener(
      * @param extras Extra information regarding the current the network usage.
      */
     data class Result(
-            val code: Int,
+            val code: ResultCode,
             val extras: Result.Extras) {
 
+        /**
+         * Current bytes received/transmitted by this app.
+         * Returns -1 if value not available.
+         *
+         * @param rxMobile bytes downloaded on a mobile network
+         * @param txMobile bytes uploaded on a mobile network
+         * @param rxWifi bytes downloaded on a wifi network
+         * @param txWifi bytes uploaded on a wifi network
+         * @param rxBytes bytes downloaded on all networks
+         * @param txBytes bytes uploaded on all networks
+         */
         data class Extras(
                 val rxMobile: Long, val txMobile: Long,
-                val rxWifi: Long, val txWifi: Long)
+                val rxWifi: Long, val txWifi: Long,
+                val rxBytes: Long, val txBytes: Long)
     }
 }
