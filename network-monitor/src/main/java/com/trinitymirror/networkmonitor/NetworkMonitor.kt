@@ -8,22 +8,26 @@ import com.trinitymirror.networkmonitor.monitorjob.MonitorJobFactory
  */
 class NetworkMonitor private constructor(
         private val usageCallbacks: UsageCallbackRegister,
-        monitorJobFactory: MonitorJobFactory) {
+        private val monitorJobFactory: MonitorJobFactory) {
 
     internal val networkListeners = mutableListOf<UsageListener>()
-
-    init {
-        monitorJobFactory.scheduleJob()
-    }
 
     fun registerListener(listener: UsageListener) {
         usageCallbacks.registerUsageCallback(listener)
         networkListeners.add(listener)
+
+        if (networkListeners.size == 1) {
+            monitorJobFactory.scheduleJob()
+        }
     }
 
     fun unregisterListener(listener: UsageListener) {
         usageCallbacks.unregisterUsageCallback(listener)
         networkListeners.remove(listener)
+
+        if (networkListeners.isEmpty()) {
+            monitorJobFactory.cancelJob()
+        }
     }
 
     companion object {

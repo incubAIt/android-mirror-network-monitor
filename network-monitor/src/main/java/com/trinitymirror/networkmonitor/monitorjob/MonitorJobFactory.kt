@@ -17,7 +17,12 @@ internal class MonitorJobFactory(
                         jobTrigger))
     }
 
+    fun cancelJob() {
+        jobDispatcher.cancel(TAG)
+    }
+
     companion object {
+        val TAG = "network-monitor-job-service"
 
         private fun createJob(jobBuilder: Job.Builder, jobTrigger: JobTrigger): Job {
             return jobBuilder

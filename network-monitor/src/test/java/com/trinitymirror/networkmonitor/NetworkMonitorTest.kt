@@ -1,5 +1,7 @@
 package com.trinitymirror.networkmonitor
 
+import com.nhaarman.mockito_kotlin.never
+import com.nhaarman.mockito_kotlin.times
 import com.trinitymirror.networkmonitor.monitorjob.MonitorJobFactory
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
 import org.amshove.kluent.mock
@@ -25,10 +27,44 @@ class NetworkMonitorTest : BaseTest() {
     }
 
     @Test
-    fun `when init, job is scheduled`() {
-        NetworkMonitor.with()
+    fun `when register first listener, schedule job`() {
+        NetworkMonitor.with().registerListener(UsageListenerMother.create())
 
         verify(jobFactory).scheduleJob()
+    }
+
+    @Test
+    fun `when register second listener, don't schedule job`() {
+        val networkMonitor = NetworkMonitor.with()
+        networkMonitor.registerListener(UsageListenerMother.create(1))
+
+        networkMonitor.registerListener(UsageListenerMother.create(2))
+
+        verify(jobFactory, times(1)).scheduleJob()
+    }
+
+    @Test
+    fun `when unregister last listener, cancel job`() {
+        val networkMonitor = NetworkMonitor.with()
+        val listener = UsageListenerMother.create(1)
+        networkMonitor.registerListener(listener)
+
+        networkMonitor.unregisterListener(listener)
+
+        verify(jobFactory).cancelJob()
+    }
+
+    @Test
+    fun `when unregister listener but not the last one, don't cancel job`() {
+        val networkMonitor = NetworkMonitor.with()
+        val listener1 = UsageListenerMother.create(1)
+        val listener2 = UsageListenerMother.create(2)
+        networkMonitor.registerListener(listener1)
+        networkMonitor.registerListener(listener2)
+
+        networkMonitor.unregisterListener(listener1)
+
+        verify(jobFactory, never()).cancelJob()
     }
 
     @Test

@@ -33,7 +33,9 @@ class MonitorJobTest : BaseTest() {
         NetworkMonitor.with().registerListener(listener1)
         NetworkMonitor.with().registerListener(listener2)
         whenever(thresholdVerifier.isThresholdReached(any()))
-                .thenReturn(UsageListener.Result(0, UsageListener.Result.Extras(0, 0, 0, 0)))
+                .thenReturn(UsageListener.Result(
+                        UsageListener.ResultCode.MAX_BYTES_SINCE_APP_RESTART,
+                        UsageListener.Result.Extras(0, 0, 0, 0, 0, 0)))
 
         monitorJob.execute()
                 .test()
