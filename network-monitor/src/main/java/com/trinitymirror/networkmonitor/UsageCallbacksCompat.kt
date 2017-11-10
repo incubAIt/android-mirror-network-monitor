@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Build
 
 /**
- * Created by ricardobelchior on 09/11/2017.
+ * A [UsageCallbackRegister] that returns the correct implementation according to the Android version.
  */
 internal class UsageCallbacksCompat(context: Context) : UsageCallbackRegister {
 

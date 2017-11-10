@@ -8,16 +8,13 @@ import android.support.annotation.RequiresApi
 import android.support.v4.util.SparseArrayCompat
 import com.trinitymirror.networkmonitor.stats.Utils
 
+/**
+ * Interface with the Nougat-only feature of [android.app.usage.NetworkStatsManager.registerUsageCallback]
+ * and [android.app.usage.NetworkStatsManager.unregisterUsageCallback]
+ */
 interface UsageCallbackRegister {
 
-    /**
-     *
-     */
     fun registerUsageCallback(listener: NetworkMonitor.UsageListener)
-
-    /**
-     *
-     */
     fun unregisterUsageCallback(listener: NetworkMonitor.UsageListener)
 
     @RequiresApi(Build.VERSION_CODES.N)

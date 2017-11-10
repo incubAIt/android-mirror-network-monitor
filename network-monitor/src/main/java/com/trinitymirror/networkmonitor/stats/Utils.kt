@@ -37,7 +37,7 @@ internal object Utils {
     }
 
     /**
-     * Returns the {@link TelephonyManager#subscriberId}.
+     * Returns the [TelephonyManager.getSubscriberId].
      * This value is irrelevant for Wifi connections. Use it for MOBILE related queries.
      */
     fun getSubscriberId(context: Context): String {

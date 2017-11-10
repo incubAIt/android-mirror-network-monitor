@@ -10,8 +10,19 @@ import com.trinitymirror.networkmonitor.stats.NetworkStatsHelper
 import com.trinitymirror.networkmonitor.stats.TrafficStatsHelper
 import com.trinitymirror.networkmonitor.stats.Utils
 
+/**
+ * Single-method interface to verify if traffic data was exceeded.
+ * This interface has 2 implementations: [BaseThresholdVerifier] for `API < 23` and
+ * [MarshmallowThresholdVerifier] for `API >= 23`
+ *
+ * @see [isThresholdReached]
+ */
 interface ThresholdVerifier {
 
+    /**
+     * Verifies if the threshold is exceeded for the given listener.
+     * Returns a [Result] object that aggregates information about the current traffic stats.
+     */
     fun isThresholdReached(listener: NetworkMonitor.UsageListener): Result
 
     data class Result(val isThresholdReached: Boolean, val reason: Int)

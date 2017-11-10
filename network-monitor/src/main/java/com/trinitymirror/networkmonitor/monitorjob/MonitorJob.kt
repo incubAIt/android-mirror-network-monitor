@@ -5,7 +5,7 @@ import com.trinitymirror.networkmonitor.NetworkMonitorServiceLocator
 import io.reactivex.Completable
 
 /**
- * Created by ricardobelchior on 09/11/2017.
+ * Monitoring job that gets executed every 2h to verify data usage.
  */
 class MonitorJob(private val thresholdVerifier: ThresholdVerifier) {
 

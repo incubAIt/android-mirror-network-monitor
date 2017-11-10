@@ -142,7 +142,7 @@ class NetworkStatsHelper(private val networkStatsManager: NetworkStatsManager) {
     /**
      * Read every bucket from the given networkStats object and sum up all the bytes.
      */
-    private fun getBytesFromBucket(networkStats: NetworkStats,
+    private inline fun getBytesFromBucket(networkStats: NetworkStats,
                                    getFromBucket: (bucket: NetworkStats.Bucket) -> Long): Long {
         var bytes: Long = 0
         val bucket = NetworkStats.Bucket()

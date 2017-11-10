@@ -8,7 +8,8 @@ import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 
 /**
- * Created by ricardobelchior on 09/11/2017.
+ * Job service class triggered by [FirebaseJobDispatcher][com.firebase.jobdispatcher.FirebaseJobDispatcher].
+ * Actual work is delegated to [MonitorJob].
  */
 internal class MonitorJobService : JobService() {
 

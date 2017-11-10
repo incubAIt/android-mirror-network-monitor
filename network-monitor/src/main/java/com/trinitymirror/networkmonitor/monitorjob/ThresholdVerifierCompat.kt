@@ -6,7 +6,7 @@ import android.os.Build
 import com.trinitymirror.networkmonitor.NetworkMonitor
 
 /**
- * Created by ricardobelchior on 09/11/2017.
+ * A [ThresholdVerifier] that returns the correct implementation according to the Android version.
  */
 class ThresholdVerifierCompat(context: Context) : ThresholdVerifier {
 
