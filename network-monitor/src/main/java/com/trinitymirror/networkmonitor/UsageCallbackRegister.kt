@@ -14,20 +14,20 @@ import com.trinitymirror.networkmonitor.stats.Utils
  */
 internal interface UsageCallbackRegister {
 
-    fun registerUsageCallback(listener: NetworkMonitor.UsageListener)
-    fun unregisterUsageCallback(listener: NetworkMonitor.UsageListener)
+    fun registerUsageCallback(listener: UsageListener)
+    fun unregisterUsageCallback(listener: UsageListener)
 
     @RequiresApi(Build.VERSION_CODES.N)
     open class Nougat(private val context: Context) : UsageCallbackRegister {
         protected val usageCallbacksList = SparseArrayCompat<NetworkStatsManager.UsageCallback>()
 
-        override fun registerUsageCallback(listener: NetworkMonitor.UsageListener) {
+        override fun registerUsageCallback(listener: UsageListener) {
             val thresholdBytes = listener.params.maxBytesSinceAppRestart
 
-            val networkType = if (listener.params.networkType == NetworkMonitor.UsageListener.NetworkType.MOBILE)
+            val networkType = if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
                 ConnectivityManager.TYPE_MOBILE else ConnectivityManager.TYPE_WIFI
 
-            val subscriberId = if (listener.params.networkType == NetworkMonitor.UsageListener.NetworkType.MOBILE)
+            val subscriberId = if (listener.params.networkType == UsageListener.NetworkType.MOBILE)
                 getSubscriberId() else ""
 
             val usageCallback = object : NetworkStatsManager.UsageCallback() {
@@ -41,15 +41,15 @@ internal interface UsageCallbackRegister {
                     .registerUsageCallback(networkType, subscriberId, thresholdBytes, usageCallback)
         }
 
-        open fun onThresholdReached(listener: NetworkMonitor.UsageListener) {
-            //val reason = TODO("create reason enums")
-            //listener.callback.onMaxBytesReached(reason)
+        open fun onThresholdReached(listener: UsageListener) {
+            //val code = TODO("create code enums")
+            //listener.callback.onMaxBytesReached(code)
 
             // store warning in shared prefs?
             // unregister callback
         }
 
-        override fun unregisterUsageCallback(listener: NetworkMonitor.UsageListener) {
+        override fun unregisterUsageCallback(listener: UsageListener) {
             val usageCallback = usageCallbacksList.get(listener.id)
             getNetworkStatsManager()
                     .unregisterUsageCallback(usageCallback)
@@ -64,10 +64,10 @@ internal interface UsageCallbackRegister {
     }
 
     class Empty : UsageCallbackRegister {
-        override fun registerUsageCallback(listener: NetworkMonitor.UsageListener) {
+        override fun registerUsageCallback(listener: UsageListener) {
         }
 
-        override fun unregisterUsageCallback(listener: NetworkMonitor.UsageListener) {
+        override fun unregisterUsageCallback(listener: UsageListener) {
         }
     }
 }

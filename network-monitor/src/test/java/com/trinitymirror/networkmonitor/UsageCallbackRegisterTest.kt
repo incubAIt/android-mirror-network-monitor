@@ -18,7 +18,7 @@ class UsageCallbackRegisterTest : BaseTest() {
     }
 
     private val statsManager = mock(NetworkStatsManager::class)
-    private val libraryCallback = mock(NetworkMonitor.UsageListener.Callback::class)
+    private val libraryCallback = mock(UsageListener.Callback::class)
 
     private lateinit var usageCallbackRegister: UsageCallbackRegisterStub
 
@@ -30,7 +30,7 @@ class UsageCallbackRegisterTest : BaseTest() {
     @Test
     fun `register is called with correct params for mobile`() {
         val id = 1
-        val listener = UsageListenerMother.create(id, NetworkMonitor.UsageListener.NetworkType.MOBILE, libraryCallback)
+        val listener = UsageListenerMother.create(id, UsageListener.NetworkType.MOBILE, libraryCallback)
 
 
         usageCallbackRegister.registerUsageCallback(listener)
@@ -47,7 +47,7 @@ class UsageCallbackRegisterTest : BaseTest() {
     @Test
     fun `register is called with correct params for wifi`() {
         val id = 1
-        val listener = UsageListenerMother.create(id, NetworkMonitor.UsageListener.NetworkType.WIFI, libraryCallback)
+        val listener = UsageListenerMother.create(id, UsageListener.NetworkType.WIFI, libraryCallback)
 
 
         usageCallbackRegister.registerUsageCallback(listener)
@@ -64,7 +64,7 @@ class UsageCallbackRegisterTest : BaseTest() {
     @Test
     fun `when unregister, trigger NetworkStatsManager and remove from SparseArray`() {
         val id = 1
-        val listener = UsageListenerMother.create(id, NetworkMonitor.UsageListener.NetworkType.WIFI, libraryCallback)
+        val listener = UsageListenerMother.create(id, UsageListener.NetworkType.WIFI, libraryCallback)
         usageCallbackRegister.registerUsageCallback(listener)
         val callback = usageCallbackRegister.callbacksList()[id]
 
@@ -78,7 +78,7 @@ class UsageCallbackRegisterTest : BaseTest() {
 
     @Test
     fun `when android triggers the callback, then notify listener`() {
-        val listener = UsageListenerMother.create(1, NetworkMonitor.UsageListener.NetworkType.MOBILE, libraryCallback)
+        val listener = UsageListenerMother.create(1, UsageListener.NetworkType.MOBILE, libraryCallback)
         usageCallbackRegister.onThresholdReached(listener)
 
         verify(libraryCallback).onMaxBytesReached(any())

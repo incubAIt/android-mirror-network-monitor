@@ -3,9 +3,7 @@ package com.trinitymirror.networkmonitor.monitorjob
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import com.trinitymirror.networkmonitor.BaseTest
-import com.trinitymirror.networkmonitor.NetworkMonitor
-import com.trinitymirror.networkmonitor.UsageCallbackRegister
+import com.trinitymirror.networkmonitor.*
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
 import org.amshove.kluent.any
 import org.amshove.kluent.mock
@@ -35,7 +33,7 @@ class MonitorJobTest : BaseTest() {
         NetworkMonitor.with().registerListener(listener1)
         NetworkMonitor.with().registerListener(listener2)
         whenever(thresholdVerifier.isThresholdReached(any()))
-                .thenReturn(ThresholdVerifier.Result(true, 0))
+                .thenReturn(UsageListener.Result(0, UsageListener.Result.Extras(0, 0, 0, 0)))
 
         monitorJob.execute()
                 .test()

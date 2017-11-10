@@ -14,11 +14,11 @@ internal class UsageCallbacksCompat(context: Context) : UsageCallbackRegister {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) UsageCallbackRegister.Nougat(context)
             else UsageCallbackRegister.Empty()
 
-    override fun registerUsageCallback(listener: NetworkMonitor.UsageListener) {
+    override fun registerUsageCallback(listener: UsageListener) {
         IMPL.registerUsageCallback(listener)
     }
 
-    override fun unregisterUsageCallback(listener: NetworkMonitor.UsageListener) {
+    override fun unregisterUsageCallback(listener: UsageListener) {
         IMPL.unregisterUsageCallback(listener)
     }
 

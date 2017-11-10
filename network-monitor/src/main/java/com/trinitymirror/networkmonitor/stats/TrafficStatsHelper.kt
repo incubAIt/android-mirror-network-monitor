@@ -4,33 +4,21 @@ import android.net.TrafficStats
 
 object TrafficStatsHelper {
 
-    val allRxBytes: Long
-        get() = TrafficStats.getTotalRxBytes()
+    fun allRxBytes() = TrafficStats.getTotalRxBytes()
 
-    val allTxBytes: Long
-        get() = TrafficStats.getTotalTxBytes()
+    fun allTxBytes() = TrafficStats.getTotalTxBytes()
 
-    val allRxBytesMobile: Long
-        get() = TrafficStats.getMobileRxBytes()
+    fun allRxBytesMobile() = TrafficStats.getMobileRxBytes()
 
-    val allTxBytesMobile: Long
-        get() = TrafficStats.getMobileTxBytes()
+    fun allTxBytesMobile() = TrafficStats.getMobileTxBytes()
 
-    val allRxBytesWifi: Long
-        get() = TrafficStats.getTotalRxBytes() - TrafficStats.getMobileRxBytes()
+    fun allRxBytesWifi() = TrafficStats.getTotalRxBytes() - TrafficStats.getMobileRxBytes()
 
-    val allTxBytesWifi: Long
-        get() = TrafficStats.getTotalTxBytes() - TrafficStats.getMobileTxBytes()
+    fun allTxBytesWifi() = TrafficStats.getTotalTxBytes() - TrafficStats.getMobileTxBytes()
 
-    fun getUidRxBytes(uid: Int): Long {
-        return TrafficStats.getUidRxBytes(uid)
-    }
+    fun uidRxBytes(uid: Int) = TrafficStats.getUidRxBytes(uid)
 
-    fun getUidTxBytes(uid: Int): Long {
-        return TrafficStats.getUidTxBytes(uid)
-    }
+    fun uidTxBytes(uid: Int) = TrafficStats.getUidTxBytes(uid)
 
-    fun getUidBytes(uid: Int): Long {
-        return getUidRxBytes(uid) + getUidTxBytes(uid)
-    }
+    fun uidBytes(uid: Int) = uidRxBytes(uid) + uidTxBytes(uid)
 }

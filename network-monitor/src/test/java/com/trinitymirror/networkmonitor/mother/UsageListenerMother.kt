@@ -1,40 +1,39 @@
 package com.trinitymirror.networkmonitor.mother
 
-import com.trinitymirror.networkmonitor.NetworkMonitor
-import com.trinitymirror.networkmonitor.monitorjob.ThresholdVerifier
+import com.trinitymirror.networkmonitor.UsageListener
 
 object UsageListenerMother {
 
     fun create(id: Int,
-               networkType: NetworkMonitor.UsageListener.NetworkType,
-               callback: NetworkMonitor.UsageListener.Callback): NetworkMonitor.UsageListener {
+               networkType: UsageListener.NetworkType,
+               callback: UsageListener.Callback): UsageListener {
 
-        return NetworkMonitor.UsageListener(
+        return UsageListener(
                 id, params(networkType), callback)
     }
 
-    fun create(id: Int): NetworkMonitor.UsageListener {
-        return NetworkMonitor.UsageListener(
+    fun create(id: Int): UsageListener {
+        return UsageListener(
                 id, params(), callback())
     }
 
-    fun create(): NetworkMonitor.UsageListener {
-        return NetworkMonitor.UsageListener(
+    fun create(): UsageListener {
+        return UsageListener(
                 1,
                 params(),
                 callback())
     }
 
-    private fun callback(): NetworkMonitor.UsageListener.Callback {
-        return object : NetworkMonitor.UsageListener.Callback {
-            override fun onMaxBytesReached(result: ThresholdVerifier.Result) {
+    private fun callback(): UsageListener.Callback {
+        return object : UsageListener.Callback {
+            override fun onMaxBytesReached(result: UsageListener.Result) {
             }
         }
     }
 
-    private fun params() = params(NetworkMonitor.UsageListener.NetworkType.MOBILE)
+    private fun params() = params(UsageListener.NetworkType.MOBILE)
 
-    private fun params(networkType: NetworkMonitor.UsageListener.NetworkType) = NetworkMonitor.UsageListener.Params(
+    private fun params(networkType: UsageListener.NetworkType) = UsageListener.Params(
             100,
             200,
             300,

@@ -5,7 +5,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Process
 import android.support.annotation.RequiresApi
-import com.trinitymirror.networkmonitor.NetworkMonitor
+import com.trinitymirror.networkmonitor.UsageListener
 import com.trinitymirror.networkmonitor.stats.NetworkStatsHelper
 import com.trinitymirror.networkmonitor.stats.TrafficStatsHelper
 import com.trinitymirror.networkmonitor.stats.Utils
@@ -21,18 +21,24 @@ interface ThresholdVerifier {
 
     /**
      * Verifies if the threshold is exceeded for the given listener.
-     * Returns a [Result] object that aggregates information about the current traffic stats.
+     * Returns a [UsageListener.Result] object that aggregates information about the current traffic stats.
      */
-    fun isThresholdReached(listener: NetworkMonitor.UsageListener): Result
-
-    data class Result(val isThresholdReached: Boolean, val reason: Int)
+    fun isThresholdReached(listener: UsageListener): UsageListener.Result?
 
     class BaseThresholdVerifier : ThresholdVerifier {
 
-        override fun isThresholdReached(listener: NetworkMonitor.UsageListener): Result {
-            val bytes = TrafficStatsHelper.getUidBytes(Process.myUid())
-            return Result(bytes > listener.params.maxBytesSinceDeviceReboot, 0)//TODO("add proper result")
+        override fun isThresholdReached(listener: UsageListener): UsageListener.Result? {
+            val bytes = TrafficStatsHelper.uidBytes(Process.myUid())
+
+            return if (isThresholdReached(bytes, listener)) {
+                UsageListener.Result(0, UsageListener.Result.Extras(0, 0, 0, 0))
+            } else {
+                null
+            }
         }
+
+        private fun isThresholdReached(bytes: Long, listener: UsageListener) =
+                bytes > listener.params.maxBytesSinceDeviceReboot
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -41,23 +47,29 @@ interface ThresholdVerifier {
         private val networkStatsHelper = NetworkStatsHelper(
                 context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager)
 
-        override fun isThresholdReached(listener: NetworkMonitor.UsageListener): Result {
-            return when (listener.params.networkType) {
-                NetworkMonitor.UsageListener.NetworkType.WIFI -> verifyOnWifi(listener)
-                NetworkMonitor.UsageListener.NetworkType.MOBILE -> verifyOnMobile(listener)
+        override fun isThresholdReached(listener: UsageListener): UsageListener.Result? {
+            val bytes = queryPackageBytes(listener)
+
+            return if (isThresholdReached(bytes, listener)) {
+                UsageListener.Result(0, UsageListener.Result.Extras(0, 0, 0, 0))
+            } else {
+                null
             }
         }
 
-        private fun verifyOnWifi(listener: NetworkMonitor.UsageListener): Result {
-            val bytes = networkStatsHelper.queryPackageBytesWifi(Process.myUid(), listener.params.periodInMillis)
-            return Result(bytes > listener.params.maxBytesSinceLastPeriod, 0)//TODO("add proper result")
-        }
+        private fun isThresholdReached(bytes: Long, listener: UsageListener) =
+                bytes > listener.params.maxBytesSinceLastPeriod
 
-        private fun verifyOnMobile(listener: NetworkMonitor.UsageListener): Result {
-            val bytes = networkStatsHelper.queryPackageBytesMobile(
-                    Process.myUid(), Utils.getSubscriberId(context), listener.params.periodInMillis)
+        private fun queryPackageBytes(listener: UsageListener): Long {
+            return when (listener.params.networkType) {
+                UsageListener.NetworkType.WIFI ->
+                    networkStatsHelper.queryPackageBytesWifi(
+                            Process.myUid(), listener.params.periodInMillis)
 
-            return Result(bytes > listener.params.maxBytesSinceLastPeriod, 0)//TODO("add proper result")
+                UsageListener.NetworkType.MOBILE ->
+                    networkStatsHelper.queryPackageBytesMobile(
+                            Process.myUid(), Utils.getSubscriberId(context), listener.params.periodInMillis)
+            }
         }
     }
 }

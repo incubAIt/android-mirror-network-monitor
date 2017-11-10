@@ -2,6 +2,7 @@ package com.trinitymirror.networkmonitor.monitorjob
 
 import com.trinitymirror.networkmonitor.NetworkMonitor
 import com.trinitymirror.networkmonitor.NetworkMonitorServiceLocator
+import com.trinitymirror.networkmonitor.UsageListener
 import io.reactivex.Completable
 
 /**
@@ -22,14 +23,13 @@ class MonitorJob(private val thresholdVerifier: ThresholdVerifier) {
                 .forEach { verifyThreshold(it) }
     }
 
-    private fun verifyThreshold(listener: NetworkMonitor.UsageListener) {
-        val result = thresholdVerifier.isThresholdReached(listener)
-        if (result.isThresholdReached) {
-            onThresholdReached(listener, result)
+    private fun verifyThreshold(listener: UsageListener) {
+        thresholdVerifier.isThresholdReached(listener)?.let {
+            onThresholdReached(listener, it)
         }
     }
 
-    private fun onThresholdReached(listener: NetworkMonitor.UsageListener, result: ThresholdVerifier.Result) {
+    private fun onThresholdReached(listener: UsageListener, result: UsageListener.Result) {
         listener.callback.onMaxBytesReached(result)
 
         //TODO Store in shared prefs ?
