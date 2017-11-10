@@ -25,11 +25,14 @@ class MonitorJob(private val thresholdVerifier: ThresholdVerifier) {
     private fun verifyThreshold(listener: NetworkMonitor.UsageListener) {
         val result = thresholdVerifier.isThresholdReached(listener)
         if (result.isThresholdReached) {
-            listener.callback.onMaxBytesReached(result)
-
-            //TODO Store in shared prefs ?
+            onThresholdReached(listener, result)
         }
+    }
 
+    private fun onThresholdReached(listener: NetworkMonitor.UsageListener, result: ThresholdVerifier.Result) {
+        listener.callback.onMaxBytesReached(result)
+
+        //TODO Store in shared prefs ?
     }
 
 }

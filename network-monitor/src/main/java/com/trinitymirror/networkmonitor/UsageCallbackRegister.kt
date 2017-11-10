@@ -12,14 +12,14 @@ import com.trinitymirror.networkmonitor.stats.Utils
  * Interface with the Nougat-only feature of [android.app.usage.NetworkStatsManager.registerUsageCallback]
  * and [android.app.usage.NetworkStatsManager.unregisterUsageCallback]
  */
-interface UsageCallbackRegister {
+internal interface UsageCallbackRegister {
 
     fun registerUsageCallback(listener: NetworkMonitor.UsageListener)
     fun unregisterUsageCallback(listener: NetworkMonitor.UsageListener)
 
     @RequiresApi(Build.VERSION_CODES.N)
-    class Nougat(private val context: Context) : UsageCallbackRegister {
-        private val usageCallbacksList = SparseArrayCompat<NetworkStatsManager.UsageCallback>()
+    open class Nougat(private val context: Context) : UsageCallbackRegister {
+        protected val usageCallbacksList = SparseArrayCompat<NetworkStatsManager.UsageCallback>()
 
         override fun registerUsageCallback(listener: NetworkMonitor.UsageListener) {
             val thresholdBytes = listener.params.maxBytesSinceAppRestart
@@ -28,14 +28,11 @@ interface UsageCallbackRegister {
                 ConnectivityManager.TYPE_MOBILE else ConnectivityManager.TYPE_WIFI
 
             val subscriberId = if (listener.params.networkType == NetworkMonitor.UsageListener.NetworkType.MOBILE)
-                Utils.getSubscriberId(context) else ""
+                getSubscriberId() else ""
 
             val usageCallback = object : NetworkStatsManager.UsageCallback() {
                 override fun onThresholdReached(networkType: Int, subscriberId: String?) {
-                    val reason = TODO("create reason enums")
-                    listener.callback.onMaxBytesReached(reason)
-
-                    // store warning in shared prefs?
+                    onThresholdReached(listener)
                 }
             }
             usageCallbacksList.put(listener.id, usageCallback)
@@ -44,13 +41,25 @@ interface UsageCallbackRegister {
                     .registerUsageCallback(networkType, subscriberId, thresholdBytes, usageCallback)
         }
 
+        open fun onThresholdReached(listener: NetworkMonitor.UsageListener) {
+            //val reason = TODO("create reason enums")
+            //listener.callback.onMaxBytesReached(reason)
+
+            // store warning in shared prefs?
+            // unregister callback
+        }
+
         override fun unregisterUsageCallback(listener: NetworkMonitor.UsageListener) {
             val usageCallback = usageCallbacksList.get(listener.id)
             getNetworkStatsManager()
                     .unregisterUsageCallback(usageCallback)
+
+            usageCallbacksList.remove(listener.id)
         }
 
-        private fun getNetworkStatsManager() =
+        open fun getSubscriberId() = Utils.getSubscriberId(context)
+
+        open fun getNetworkStatsManager() =
                 context.getSystemService(Context.NETWORK_STATS_SERVICE) as NetworkStatsManager
     }
 

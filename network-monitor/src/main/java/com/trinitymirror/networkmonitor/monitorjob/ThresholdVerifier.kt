@@ -31,7 +31,7 @@ interface ThresholdVerifier {
 
         override fun isThresholdReached(listener: NetworkMonitor.UsageListener): Result {
             val bytes = TrafficStatsHelper.getUidBytes(Process.myUid())
-            return bytes > listener.params.maxBytesSinceDeviceReboot
+            return Result(bytes > listener.params.maxBytesSinceDeviceReboot, 0)//TODO("add proper result")
         }
     }
 
@@ -50,14 +50,14 @@ interface ThresholdVerifier {
 
         private fun verifyOnWifi(listener: NetworkMonitor.UsageListener): Result {
             val bytes = networkStatsHelper.queryPackageBytesWifi(Process.myUid(), listener.params.periodInMillis)
-            return bytes > listener.params.maxBytesSinceLastPeriod
+            return Result(bytes > listener.params.maxBytesSinceLastPeriod, 0)//TODO("add proper result")
         }
 
         private fun verifyOnMobile(listener: NetworkMonitor.UsageListener): Result {
             val bytes = networkStatsHelper.queryPackageBytesMobile(
                     Process.myUid(), Utils.getSubscriberId(context), listener.params.periodInMillis)
 
-            return bytes > listener.params.maxBytesSinceLastPeriod
+            return Result(bytes > listener.params.maxBytesSinceLastPeriod, 0)//TODO("add proper result")
         }
     }
 }

@@ -15,6 +15,8 @@ object NetworkMonitorServiceLocator {
     internal lateinit var context: Context
 
     private var monitorJobFactory: MonitorJobFactory? = null
+    private var usageCallbackRegister: UsageCallbackRegister? = null
+    private var thresholdVerifier: ThresholdVerifier? = null
     private var jobExecutionPeriodicity = -1
     private var jobExecutionTolerance = -1
 
@@ -34,12 +36,16 @@ object NetworkMonitorServiceLocator {
         }
     }
 
-    fun provideUsageCallbackRegister(): UsageCallbackRegister {
-        return UsageCallbacksCompat(context)
+    internal fun provideUsageCallbackRegister(): UsageCallbackRegister {
+        return usageCallbackRegister ?:
+                UsageCallbacksCompat(context)
+                        .also { usageCallbackRegister = it }
     }
 
-    fun provideThresholdVerifier(): ThresholdVerifier {
-        return ThresholdVerifierCompat(context)
+    internal fun provideThresholdVerifier(): ThresholdVerifier {
+        return thresholdVerifier ?:
+                ThresholdVerifierCompat(context)
+                        .also { thresholdVerifier = it }
     }
 
     class Config(context: Context) {
@@ -51,6 +57,21 @@ object NetworkMonitorServiceLocator {
         fun withJobExecutionWindow(periodicity: Int, tolerance: Int): Config {
             NetworkMonitorServiceLocator.jobExecutionPeriodicity = periodicity
             NetworkMonitorServiceLocator.jobExecutionTolerance = tolerance
+            return this
+        }
+
+        internal fun withMonitorJobFactory(monitorJobFactory: MonitorJobFactory): Config {
+            NetworkMonitorServiceLocator.monitorJobFactory = monitorJobFactory
+            return this
+        }
+
+        internal fun withThresholdVerifier(thresholdVerifier: ThresholdVerifier): Config {
+            NetworkMonitorServiceLocator.thresholdVerifier = thresholdVerifier
+            return this
+        }
+
+        internal fun withUsageCallbackRegister(usageCallbackRegister: UsageCallbackRegister): Config {
+            NetworkMonitorServiceLocator.usageCallbackRegister = usageCallbackRegister
             return this
         }
     }
