@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor.monitorjob
+package com.trinitymirror.networkmonitor.job
 
 import com.firebase.jobdispatcher.JobParameters
 import com.firebase.jobdispatcher.JobService

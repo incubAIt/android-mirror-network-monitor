@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.ConnectivityManager
 import com.nhaarman.mockito_kotlin.verify
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
+import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
 import org.amshove.kluent.any
 import org.amshove.kluent.mock
 import org.amshove.kluent.shouldBe

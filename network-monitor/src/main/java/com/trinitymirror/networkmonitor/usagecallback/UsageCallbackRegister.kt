@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor
+package com.trinitymirror.networkmonitor.usagecallback
 
 import android.app.usage.NetworkStatsManager
 import android.content.Context
@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Process
 import android.support.annotation.RequiresApi
 import android.support.v4.util.SparseArrayCompat
+import com.trinitymirror.networkmonitor.UsageListener
 import com.trinitymirror.networkmonitor.stats.NetworkStatsHelper
 import com.trinitymirror.networkmonitor.stats.Utils
 

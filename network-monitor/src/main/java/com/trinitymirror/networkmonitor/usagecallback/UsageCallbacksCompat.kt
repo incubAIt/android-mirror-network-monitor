@@ -1,10 +1,11 @@
-package com.trinitymirror.networkmonitor
+package com.trinitymirror.networkmonitor.usagecallback
 
 import android.annotation.SuppressLint
 import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.os.Build
 import android.support.annotation.RequiresApi
+import com.trinitymirror.networkmonitor.UsageListener
 
 /**
  * A [UsageCallbackRegister] that returns the correct implementation according to the Android version.

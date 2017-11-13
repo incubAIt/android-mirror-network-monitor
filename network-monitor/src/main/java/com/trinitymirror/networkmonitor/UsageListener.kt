@@ -57,7 +57,7 @@ data class UsageListener(
      */
     data class Result(
             val code: ResultCode,
-            val extras: Result.Extras) {
+            val extras: Extras) {
 
         /**
          * Current bytes received/transmitted by this app.

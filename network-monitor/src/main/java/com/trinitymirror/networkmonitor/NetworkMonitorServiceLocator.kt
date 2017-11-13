@@ -5,9 +5,11 @@ import android.content.Context
 import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobTrigger
-import com.trinitymirror.networkmonitor.monitorjob.MonitorJobFactory
-import com.trinitymirror.networkmonitor.monitorjob.ThresholdVerifier
-import com.trinitymirror.networkmonitor.monitorjob.ThresholdVerifierCompat
+import com.trinitymirror.networkmonitor.job.MonitorJobFactory
+import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifier
+import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifierCompat
+import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
+import com.trinitymirror.networkmonitor.usagecallback.UsageCallbacksCompat
 
 @SuppressLint("StaticFieldLeak")
 object NetworkMonitorServiceLocator {

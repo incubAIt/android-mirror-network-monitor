@@ -1,10 +1,12 @@
-package com.trinitymirror.networkmonitor.monitorjob
+package com.trinitymirror.networkmonitor.job
 
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import com.trinitymirror.networkmonitor.*
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
+import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifier
+import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
 import org.amshove.kluent.any
 import org.amshove.kluent.mock
 import org.junit.Before
@@ -32,10 +34,7 @@ class MonitorJobTest : BaseTest() {
         val listener2 = UsageListenerMother.create(2)
         NetworkMonitor.with().registerListener(listener1)
         NetworkMonitor.with().registerListener(listener2)
-        whenever(thresholdVerifier.isThresholdReached(any()))
-                .thenReturn(UsageListener.Result(
-                        UsageListener.ResultCode.MAX_BYTES_SINCE_APP_RESTART,
-                        UsageListener.Result.Extras(0, 0, 0, 0, 0, 0)))
+        whenever(thresholdVerifier.isThresholdReached(any())).thenReturn(true)
 
         monitorJob.execute()
                 .test()

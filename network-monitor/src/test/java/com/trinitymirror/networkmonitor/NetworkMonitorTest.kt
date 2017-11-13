@@ -2,8 +2,9 @@ package com.trinitymirror.networkmonitor
 
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.times
-import com.trinitymirror.networkmonitor.monitorjob.MonitorJobFactory
+import com.trinitymirror.networkmonitor.job.MonitorJobFactory
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
+import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
 import org.amshove.kluent.mock
 import org.amshove.kluent.shouldBeEmpty
 import org.amshove.kluent.shouldContain

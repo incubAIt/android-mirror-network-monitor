@@ -1,6 +1,7 @@
 package com.trinitymirror.networkmonitor
 
-import com.trinitymirror.networkmonitor.monitorjob.MonitorJobFactory
+import com.trinitymirror.networkmonitor.job.MonitorJobFactory
+import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
 
 /**
  * NetworkMonitor is the main entry-point for the library, allowing users to register/unregister
@@ -17,7 +18,7 @@ class NetworkMonitor private constructor(
         networkListeners.add(listener)
 
         if (networkListeners.size == 1) {
-            monitorJobFactory.scheduleJob()
+            scheduleJob()
         }
     }
 
@@ -26,8 +27,16 @@ class NetworkMonitor private constructor(
         networkListeners.remove(listener)
 
         if (networkListeners.isEmpty()) {
-            monitorJobFactory.cancelJob()
+            cancelJob()
         }
+    }
+
+    fun scheduleJob() {
+        monitorJobFactory.scheduleJob()
+    }
+
+    fun cancelJob() {
+        monitorJobFactory.cancelJob()
     }
 
     companion object {

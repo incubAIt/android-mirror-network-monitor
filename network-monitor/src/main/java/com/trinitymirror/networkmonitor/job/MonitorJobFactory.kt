@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor.monitorjob
+package com.trinitymirror.networkmonitor.job
 
 import com.firebase.jobdispatcher.*
 import java.util.concurrent.TimeUnit
