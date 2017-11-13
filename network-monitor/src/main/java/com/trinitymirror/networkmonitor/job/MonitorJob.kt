@@ -3,16 +3,21 @@ package com.trinitymirror.networkmonitor.job
 import com.trinitymirror.networkmonitor.NetworkMonitor
 import com.trinitymirror.networkmonitor.NetworkMonitorServiceLocator
 import com.trinitymirror.networkmonitor.UsageListener
+import com.trinitymirror.networkmonitor.persistence.JobPreferences
 import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifier
 import io.reactivex.Completable
 
 /**
  * Monitoring job that gets executed every 2h to verify data usage.
  */
-class MonitorJob(private val thresholdVerifier: ThresholdVerifier) {
+class MonitorJob(
+        private val thresholdVerifier: ThresholdVerifier,
+        private val jobPreferences: JobPreferences) {
 
     // empty constructor with default arguments
-    constructor() : this(NetworkMonitorServiceLocator.provideThresholdVerifier())
+    constructor() : this(
+            NetworkMonitorServiceLocator.provideThresholdVerifier(),
+            NetworkMonitorServiceLocator.provideJobPreferences())
 
     fun execute(): Completable {
         return Completable.fromAction { executeAsync() }
@@ -27,7 +32,10 @@ class MonitorJob(private val thresholdVerifier: ThresholdVerifier) {
     }
 
     private fun hasNotTriggeredDuringLastPeriod(listener: UsageListener): Boolean {
-        TODO()
+        val lastNotificationTimestamp = jobPreferences.getLastNotificationTimestamp(listener.id)
+        val lastPeriod = System.currentTimeMillis() - listener.params.periodInMillis
+
+        return lastPeriod > lastNotificationTimestamp
     }
 
     private fun isThresholdReached(listener: UsageListener): Boolean {
@@ -39,6 +47,7 @@ class MonitorJob(private val thresholdVerifier: ThresholdVerifier) {
 
         listener.callback.onMaxBytesReached(result)
 
-        //TODO Store in shared prefs ?
+        jobPreferences.setLastNotificationTimestamp(
+                listener.id, System.currentTimeMillis())
     }
 }

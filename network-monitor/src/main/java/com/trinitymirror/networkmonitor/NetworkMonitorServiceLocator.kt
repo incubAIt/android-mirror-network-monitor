@@ -6,6 +6,7 @@ import com.firebase.jobdispatcher.FirebaseJobDispatcher
 import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobTrigger
 import com.trinitymirror.networkmonitor.job.MonitorJobFactory
+import com.trinitymirror.networkmonitor.persistence.JobPreferences
 import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifier
 import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifierCompat
 import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
@@ -19,6 +20,7 @@ object NetworkMonitorServiceLocator {
     private var monitorJobFactory: MonitorJobFactory? = null
     private var usageCallbackRegister: UsageCallbackRegister? = null
     private var thresholdVerifier: ThresholdVerifier? = null
+    private var jobPreferences: JobPreferences? = null
     private var jobExecutionPeriodicity = -1
     private var jobExecutionTolerance = -1
 
@@ -50,6 +52,10 @@ object NetworkMonitorServiceLocator {
                         .also { thresholdVerifier = it }
     }
 
+    internal fun provideJobPreferences(): JobPreferences {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     class Config(context: Context) {
 
         init {
@@ -74,6 +80,11 @@ object NetworkMonitorServiceLocator {
 
         internal fun withUsageCallbackRegister(usageCallbackRegister: UsageCallbackRegister): Config {
             NetworkMonitorServiceLocator.usageCallbackRegister = usageCallbackRegister
+            return this
+        }
+
+        internal fun withJobPreferences(jobPreferences: JobPreferences): Config {
+            NetworkMonitorServiceLocator.jobPreferences = jobPreferences
             return this
         }
     }

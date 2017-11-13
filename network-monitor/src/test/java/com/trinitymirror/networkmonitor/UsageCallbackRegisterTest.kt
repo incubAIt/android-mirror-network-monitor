@@ -3,7 +3,9 @@ package com.trinitymirror.networkmonitor
 import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.net.ConnectivityManager
+import android.os.RemoteException
 import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockito_kotlin.whenever
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
 import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
 import org.amshove.kluent.any
@@ -26,6 +28,8 @@ class UsageCallbackRegisterTest : BaseTest() {
     @Before
     override fun setUp() {
         usageCallbackRegister = UsageCallbackRegisterStub(context, statsManager)
+        whenever(statsManager.queryDetailsForUid(any(), any(), any(), any(), any()))
+                .thenThrow(RemoteException("no worries, you're under test code."))
     }
 
     @Test

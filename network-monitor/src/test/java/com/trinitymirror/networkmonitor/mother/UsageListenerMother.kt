@@ -4,23 +4,18 @@ import com.trinitymirror.networkmonitor.UsageListener
 
 object UsageListenerMother {
 
-    fun create(id: Int,
+    fun create(id: Int = 1,
                networkType: UsageListener.NetworkType,
                callback: UsageListener.Callback): UsageListener {
 
         return UsageListener(
-                id, params(networkType), callback)
+                id, params(networkType = networkType), callback)
     }
 
-    fun create(id: Int): UsageListener {
+    fun create(id: Int = 1, params: UsageListener.Params = params()): UsageListener {
         return UsageListener(
-                id, params(), callback())
-    }
-
-    fun create(): UsageListener {
-        return UsageListener(
-                1,
-                params(),
+                id,
+                params,
                 callback())
     }
 
@@ -31,12 +26,20 @@ object UsageListenerMother {
         }
     }
 
-    private fun params() = params(UsageListener.NetworkType.MOBILE)
+    fun params(
+            maxBytesSinceDeviceReboot: Long = 100,
+            maxBytesSinceAppRestart: Long = 200,
+            maxBytesSinceLastPeriod: Long = 300,
+            periodInMillis: Long = 400,
+            networkType: UsageListener.NetworkType = UsageListener.NetworkType.MOBILE) = UsageListener.Params(
+                    maxBytesSinceDeviceReboot,
+                    maxBytesSinceAppRestart,
+                    maxBytesSinceLastPeriod,
+                    periodInMillis,
+                    networkType)
 
-    private fun params(networkType: UsageListener.NetworkType) = UsageListener.Params(
-            100,
-            200,
-            300,
-            400,
-            networkType)
+    fun result(code: UsageListener.ResultCode = UsageListener.ResultCode.MAX_BYTES_SINCE_LAST_PERIOD) =
+            UsageListener.Result(code,
+                    UsageListener.Result.Extras(0, 0, 0, 0, 0, 0))
+
 }
