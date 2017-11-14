@@ -19,7 +19,6 @@ object NetworkMonitorServiceLocator {
 
     private var monitorJobFactory: MonitorJobFactory? = null
     private var usageCallbackRegister: UsageCallbackRegister? = null
-    private var thresholdVerifier: ThresholdVerifier? = null
     private var jobPreferences: JobPreferences? = null
     private var jobExecutionPeriodicity = -1
     private var jobExecutionTolerance = -1
@@ -47,9 +46,7 @@ object NetworkMonitorServiceLocator {
     }
 
     internal fun provideThresholdVerifier(): ThresholdVerifier {
-        return thresholdVerifier ?:
-                ThresholdVerifierCompat(context)
-                        .also { thresholdVerifier = it }
+        return ThresholdVerifierCompat(context)
     }
 
     internal fun provideJobPreferences(): JobPreferences {
@@ -70,11 +67,6 @@ object NetworkMonitorServiceLocator {
 
         internal fun withMonitorJobFactory(monitorJobFactory: MonitorJobFactory): Config {
             NetworkMonitorServiceLocator.monitorJobFactory = monitorJobFactory
-            return this
-        }
-
-        internal fun withThresholdVerifier(thresholdVerifier: ThresholdVerifier): Config {
-            NetworkMonitorServiceLocator.thresholdVerifier = thresholdVerifier
             return this
         }
 

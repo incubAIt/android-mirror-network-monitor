@@ -13,22 +13,19 @@ data class UsageListener(
     enum class NetworkType { WIFI, MOBILE }
 
     enum class ResultCode {
-        MAX_BYTES_SINCE_DEVICE_BOOT,
-        MAX_BYTES_SINCE_APP_RESTART,
-        MAX_BYTES_SINCE_LAST_PERIOD
+        MAX_BYTES_SINCE_LAST_PERIOD,
+        MAX_BYTES_SINCE_LAST_PERIOD_COMPAT,
+        MAX_BYTES_SINCE_APP_RESTART
     }
 
     /**
      * Provides information on when to trigger its corresponding [UsageListener]
      *
-     * @param maxBytesSinceDeviceBoot bytes allowed since the device last rebooted.
-     *  Used by [android.net.TrafficStats] `(API < 23)`.
-     *
      * @param maxBytesSinceAppRestart bytes allowed since the app restart.
      *  Used by [android.app.usage.NetworkStatsManager.registerUsageCallback] `(API >= 24)`
      *
      * @param maxBytesSinceLastPeriod bytes allowed since the last [periodInMillis].
-     *  Used by [android.app.usage.NetworkStatsManager] `(API >= 23)`
+     *  Used by [android.app.usage.NetworkStatsManager] `(API >= 23)` or [android.net.TrafficStats] `(API < 23)`
      *
      * @param periodInMillis on `API >= 23` this value specifies for how long
      * [maxBytesSinceLastPeriod] is accounted for.
@@ -36,7 +33,6 @@ data class UsageListener(
      * @param networkType Whether the thresholds applies for mobile or wifi.
      */
     data class Params(
-            val maxBytesSinceDeviceBoot: Long,
             val maxBytesSinceAppRestart: Long,
             val maxBytesSinceLastPeriod: Long,
             val periodInMillis: Long,

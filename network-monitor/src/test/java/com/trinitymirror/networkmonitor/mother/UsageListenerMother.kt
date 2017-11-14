@@ -27,13 +27,11 @@ object UsageListenerMother {
     }
 
     fun params(
-            maxBytesSinceDeviceReboot: Long = 100,
             maxBytesSinceAppRestart: Long = 200,
             maxBytesSinceLastPeriod: Long = 300,
             periodInMillis: Long = 400,
             networkType: UsageListener.NetworkType = UsageListener.NetworkType.MOBILE) = UsageListener.Params(
-                    maxBytesSinceDeviceReboot,
-                    maxBytesSinceAppRestart,
+            maxBytesSinceAppRestart,
                     maxBytesSinceLastPeriod,
                     periodInMillis,
                     networkType)

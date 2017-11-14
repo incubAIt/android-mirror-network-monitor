@@ -9,7 +9,19 @@ interface JobPreferences {
 
     fun setLastNotificationTimestamp(listenerId: Int, timestamp: Long)
 
-    fun getLastKnownAppTraffic(): Long
+    fun getLastBootOffset(): Long
 
-    fun setLastKnownAppTraffic(bytes: Long)
+    fun setLastBootOffset(bytes: Long)
+
+    fun getLastTrafficStats(): Long
+
+    fun setLastTrafficStats(bytes: Long)
+
+    fun getLastPeriodTick(): Long
+
+    fun setLastPeriodTick(timestamp: Long)
+
+    fun getLastPeriodOffset(): Long
+
+    fun setLastPeriodOffset(bytes: Long)
 }
