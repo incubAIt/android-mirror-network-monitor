@@ -18,14 +18,14 @@ internal class BaseThresholdVerifier(
     override fun isThresholdReached(listener: UsageListener): Boolean {
         val uid = Process.myUid()
         val currentTime = currentTimeInMillis.obtain()
-        val currentBytes = trafficStatsHelper.uidBytes(uid)
+        val currentTrafficStats = trafficStatsHelper.uidBytes(uid)
 
         val lastBootOffset = jobPreferences.getLastBootOffset()
         val lastTrafficStats = jobPreferences.getLastTrafficStats()
         val bootOffset =
-                if (currentBytes < lastTrafficStats) lastTrafficStats + lastBootOffset
+                if (currentTrafficStats < lastTrafficStats) lastTrafficStats + lastBootOffset
                 else lastBootOffset
-        val lastKnownAppTraffic = currentBytes + bootOffset
+        val lastKnownAppTraffic = currentTrafficStats + bootOffset
         val lastPeriodTick = jobPreferences.getLastPeriodTick()
         val periodTick =
                 if ((currentTime - listener.params.periodInMillis) >= lastPeriodTick) currentTime
@@ -37,7 +37,7 @@ internal class BaseThresholdVerifier(
         val totalBytesSinceLastPeriod = lastKnownAppTraffic - periodOffset
 
         jobPreferences.setLastBootOffset(bootOffset)
-        jobPreferences.setLastTrafficStats(currentBytes)
+        jobPreferences.setLastTrafficStats(currentTrafficStats)
         jobPreferences.setLastPeriodTick(periodTick)
         jobPreferences.setLastPeriodOffset(periodOffset)
 
