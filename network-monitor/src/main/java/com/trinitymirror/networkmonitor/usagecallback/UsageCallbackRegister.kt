@@ -54,8 +54,7 @@ internal interface UsageCallbackRegister {
         open fun onThresholdReached(listener: UsageListener) {
             listener.callback.onMaxBytesReached(buildResult(listener))
 
-            // store warning in shared prefs?
-            // unregister callback
+            unregisterUsageCallback(listener)
         }
 
         private fun buildResult(listener: UsageListener): UsageListener.Result {

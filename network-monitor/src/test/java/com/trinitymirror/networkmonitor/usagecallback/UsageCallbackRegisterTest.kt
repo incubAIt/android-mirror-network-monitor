@@ -83,16 +83,16 @@ class UsageCallbackRegisterTest : BaseTest() {
     }
 
     @Test
-    fun `when android triggers the callback, then notify listener`() {
-        val listener = UsageListenerMother.create(1, UsageListener.NetworkType.MOBILE, libraryCallback)
+    fun `when android triggers the callback, then notify listener and unregister itself`() {
+        val id = 1
+        val listener = UsageListenerMother.create(id, UsageListener.NetworkType.MOBILE, libraryCallback)
+        usageCallbackRegister.registerUsageCallback(listener)
+        val callback = usageCallbackRegister.callbacksList()[id]
+
         usageCallbackRegister.onThresholdReached(listener)
 
         verify(libraryCallback).onMaxBytesReached(any())
-
-        //TODO("verify that:")
-        //  - listener is notified
-        //  - callback is unregistered
-        //  - store value in shared prefs ?
+        verify(statsManager).unregisterUsageCallback(callback)
     }
 
 
