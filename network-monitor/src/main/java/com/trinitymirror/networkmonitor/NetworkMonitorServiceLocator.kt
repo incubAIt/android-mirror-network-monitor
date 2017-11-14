@@ -7,6 +7,8 @@ import com.firebase.jobdispatcher.GooglePlayDriver
 import com.firebase.jobdispatcher.JobTrigger
 import com.trinitymirror.networkmonitor.job.MonitorJobFactory
 import com.trinitymirror.networkmonitor.persistence.JobPreferences
+import com.trinitymirror.networkmonitor.persistence.JobSharedPreferences
+import com.trinitymirror.networkmonitor.stats.TrafficStatsHelper
 import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifier
 import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifierCompat
 import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
@@ -50,7 +52,11 @@ object NetworkMonitorServiceLocator {
     }
 
     internal fun provideJobPreferences(): JobPreferences {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return JobSharedPreferences(context)
+    }
+
+    internal fun provideTrafficStatsHelper(): TrafficStatsHelper {
+        return TrafficStatsHelper.Impl()
     }
 
     class Config(context: Context) {

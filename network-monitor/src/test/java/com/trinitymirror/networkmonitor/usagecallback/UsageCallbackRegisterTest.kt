@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor
+package com.trinitymirror.networkmonitor.usagecallback
 
 import android.app.usage.NetworkStatsManager
 import android.content.Context
@@ -6,8 +6,9 @@ import android.net.ConnectivityManager
 import android.os.RemoteException
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
+import com.trinitymirror.networkmonitor.BaseTest
+import com.trinitymirror.networkmonitor.UsageListener
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
-import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
 import org.amshove.kluent.any
 import org.amshove.kluent.mock
 import org.amshove.kluent.shouldBe

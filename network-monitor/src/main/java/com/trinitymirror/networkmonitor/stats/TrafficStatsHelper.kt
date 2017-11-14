@@ -2,7 +2,7 @@ package com.trinitymirror.networkmonitor.stats
 
 import android.net.TrafficStats
 
-object TrafficStatsHelper {
+interface TrafficStatsHelper {
 
     fun allRxBytes() = TrafficStats.getTotalRxBytes()
 
@@ -21,4 +21,6 @@ object TrafficStatsHelper {
     fun uidTxBytes(uid: Int) = TrafficStats.getUidTxBytes(uid)
 
     fun uidBytes(uid: Int) = uidRxBytes(uid) + uidTxBytes(uid)
+
+    class Impl : TrafficStatsHelper
 }
