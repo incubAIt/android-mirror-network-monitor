@@ -3,7 +3,9 @@ package com.trinitymirror.networkmonitor.job
 import com.nhaarman.mockito_kotlin.never
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
-import com.trinitymirror.networkmonitor.*
+import com.trinitymirror.networkmonitor.BaseTest
+import com.trinitymirror.networkmonitor.NetworkMonitor
+import com.trinitymirror.networkmonitor.UsageListener
 import com.trinitymirror.networkmonitor.mother.UsageListenerMother
 import com.trinitymirror.networkmonitor.persistence.JobPreferences
 import com.trinitymirror.networkmonitor.thresholdverifier.ThresholdVerifier
@@ -103,6 +105,19 @@ class MonitorJobTest : BaseTest() {
 
         verify(jobPreferences)
                 .setLastNotificationTimestamp(listener1.id, System.currentTimeMillis())
+    }
+
+    @Test
+    fun `when threshold is reached, trigger listener`() {
+        val callback = mock(UsageListener.Callback::class)
+        val listener1 = UsageListenerMother.create(callback = callback)
+        NetworkMonitor.with().registerListener(listener1)
+        whenever(thresholdVerifier.isThresholdReached(any())).thenReturn(true)
+
+        runJob()
+
+        verify(callback)
+                .onMaxBytesReached(any())
     }
 
 }

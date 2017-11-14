@@ -12,11 +12,14 @@ object UsageListenerMother {
                 id, params(networkType = networkType), callback)
     }
 
-    fun create(id: Int = 1, params: UsageListener.Params = params()): UsageListener {
+    fun create(id: Int = 1,
+               params: UsageListener.Params = params(),
+               callback: UsageListener.Callback = callback()): UsageListener {
+
         return UsageListener(
                 id,
                 params,
-                callback())
+                callback)
     }
 
     private fun callback(): UsageListener.Callback {
