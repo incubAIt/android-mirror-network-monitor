@@ -15,7 +15,36 @@ internal class BaseThresholdVerifier(
         private val jobPreferences: JobPreferences,
         private val currentTimeInMillis: CurrentTimeInMillis) : ThresholdVerifier {
 
+    var totalBytesSinceLastPeriod: Long = -1
+
     override fun isThresholdReached(listener: UsageListener): Boolean {
+        val bytesSinceLastPeriod = getTotalBytesSinceLastPeriod(listener.params.periodInMillis)
+        val maxBytesSinceLastPeriod = listener.params.maxBytesSinceLastPeriod
+
+        return bytesSinceLastPeriod > maxBytesSinceLastPeriod
+    }
+
+    override fun createResult(listener: UsageListener): UsageListener.Result {
+        val uid = Process.myUid()
+
+        return UsageListener.Result(
+                UsageListener.ResultCode.MAX_BYTES_SINCE_LAST_PERIOD_COMPAT,
+                UsageListener.Result.Extras(
+                        -1, -1, -1, -1,
+                        trafficStatsHelper.uidRxBytes(uid),
+                        trafficStatsHelper.uidTxBytes(uid),
+                        getTotalBytesSinceLastPeriod(listener.params.periodInMillis)))
+    }
+
+    private fun getTotalBytesSinceLastPeriod(periodInMillis: Long): Long {
+        if (totalBytesSinceLastPeriod < 0) {
+            totalBytesSinceLastPeriod = calculateTotalBytesSinceLastPeriod(periodInMillis)
+        }
+        return totalBytesSinceLastPeriod
+    }
+
+    private fun calculateTotalBytesSinceLastPeriod(periodInMillis: Long): Long {
+
         val uid = Process.myUid()
         val currentTime = currentTimeInMillis.obtain()
         val currentTrafficStats = trafficStatsHelper.uidBytes(uid)
@@ -28,7 +57,7 @@ internal class BaseThresholdVerifier(
         val lastKnownAppTraffic = currentTrafficStats + bootOffset
         val lastPeriodTick = jobPreferences.getLastPeriodTick()
         val periodTick =
-                if ((currentTime - listener.params.periodInMillis) >= lastPeriodTick) currentTime
+                if ((currentTime - periodInMillis) >= lastPeriodTick) currentTime
                 else lastPeriodTick
         val lastPeriodOffset = jobPreferences.getLastPeriodOffset()
         val periodOffset =
@@ -41,16 +70,6 @@ internal class BaseThresholdVerifier(
         jobPreferences.setLastPeriodTick(periodTick)
         jobPreferences.setLastPeriodOffset(periodOffset)
 
-        return totalBytesSinceLastPeriod > listener.params.maxBytesSinceLastPeriod
-    }
-
-    override fun createResult(listener: UsageListener): UsageListener.Result {
-        val uid = Process.myUid()
-        return UsageListener.Result(
-                UsageListener.ResultCode.MAX_BYTES_SINCE_LAST_PERIOD_COMPAT,
-                UsageListener.Result.Extras(
-                        -1, -1, -1, -1,
-                        trafficStatsHelper.uidRxBytes(uid),
-                        trafficStatsHelper.uidTxBytes(uid)))
+        return totalBytesSinceLastPeriod
     }
 }

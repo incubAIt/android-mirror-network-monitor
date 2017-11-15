@@ -69,6 +69,7 @@ data class UsageListener(
         data class Extras(
                 val rxMobile: Long, val txMobile: Long,
                 val rxWifi: Long, val txWifi: Long,
-                val rxBytes: Long, val txBytes: Long)
+                val rxBytes: Long, val txBytes: Long,
+                val estimatedBytes: Long = -1)
     }
 }
