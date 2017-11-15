@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Network Monitor</string>
+    <string name="has_permissions">Has permissions: %b</string>
+    <string name="android_api">API = %d</string>
 </resources>
