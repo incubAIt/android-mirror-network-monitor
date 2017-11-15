@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    implementation project(':network-monitor')
 
     implementation "com.android.support:appcompat-v7:$rootProject.ext.appCompat"
     implementation "com.android.support:design:$rootProject.ext.appCompat"
