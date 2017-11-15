@@ -25,12 +25,12 @@ class MarshmallowThresholdVerifier(private val context: Context) : ThresholdVeri
     private fun isThresholdReached(bytes: Long, listener: UsageListener) =
             bytes > listener.params.maxBytesSinceLastPeriod
 
-    override fun createResult(listener: UsageListener): UsageListener.Result {
+    override fun createResult(params: UsageListener.Params): UsageListener.Result {
         val subscriberId = getSubscriberId()
-        val rxMobile = rxMobile(listener, subscriberId)
-        val txMobile = txMobile(listener, subscriberId)
-        val rxWifi = rxWifi(listener)
-        val txWifi = txWifi(listener)
+        val rxMobile = rxMobile(params, subscriberId)
+        val txMobile = txMobile(params, subscriberId)
+        val rxWifi = rxWifi(params)
+        val txWifi = txWifi(params)
         val rxBytes = rxMobile + rxWifi
         val txBytes = txMobile + txWifi
 
@@ -54,19 +54,19 @@ class MarshmallowThresholdVerifier(private val context: Context) : ThresholdVeri
         }
     }
 
-    private fun rxMobile(listener: UsageListener, subscriberId: String) =
+    private fun rxMobile(params: UsageListener.Params, subscriberId: String) =
             networkStatsHelper.queryPackageRxBytesMobile(
-                    uid, subscriberId, listener.params.periodInMillis)
+                    uid, subscriberId, params.periodInMillis)
 
-    private fun txMobile(listener: UsageListener, subscriberId: String) =
+    private fun txMobile(params: UsageListener.Params, subscriberId: String) =
             networkStatsHelper.queryPackageTxBytesMobile(
-                    uid, subscriberId, listener.params.periodInMillis)
+                    uid, subscriberId, params.periodInMillis)
 
-    private fun rxWifi(listener: UsageListener) =
-            networkStatsHelper.queryPackageRxBytesWifi(uid, listener.params.periodInMillis)
+    private fun rxWifi(params: UsageListener.Params) =
+            networkStatsHelper.queryPackageRxBytesWifi(uid, params.periodInMillis)
 
-    private fun txWifi(listener: UsageListener) =
-            networkStatsHelper.queryPackageTxBytesWifi(uid, listener.params.periodInMillis)
+    private fun txWifi(params: UsageListener.Params) =
+            networkStatsHelper.queryPackageTxBytesWifi(uid, params.periodInMillis)
 
     private fun getSubscriberId() = Utils.getSubscriberId(context)
 }

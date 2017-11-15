@@ -39,6 +39,11 @@ class NetworkMonitor private constructor(
         monitorJobFactory.cancelJob()
     }
 
+    fun obtainCurrentStats(params: UsageListener.Params) : UsageListener.Result {
+        return NetworkMonitorServiceLocator.provideThresholdVerifier()
+                .createResult(params)
+    }
+
     companion object {
         @Volatile private var INSTANCE: NetworkMonitor? = null
 

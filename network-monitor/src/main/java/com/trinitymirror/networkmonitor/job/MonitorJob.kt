@@ -43,7 +43,7 @@ class MonitorJob(
     }
 
     private fun handleThresholdReached(listener: UsageListener) {
-        val result = thresholdVerifier.createResult(listener)
+        val result = thresholdVerifier.createResult(listener.params)
 
         listener.callback.onMaxBytesReached(result)
 

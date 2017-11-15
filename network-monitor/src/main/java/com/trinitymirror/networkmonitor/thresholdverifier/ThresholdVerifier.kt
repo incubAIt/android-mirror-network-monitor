@@ -19,6 +19,6 @@ interface ThresholdVerifier {
     /**
      * Returns a [UsageListener.Result] object that aggregates information about the current traffic stats.
      */
-    fun createResult(listener: UsageListener): UsageListener.Result
+    fun createResult(params: UsageListener.Params): UsageListener.Result
 
 }

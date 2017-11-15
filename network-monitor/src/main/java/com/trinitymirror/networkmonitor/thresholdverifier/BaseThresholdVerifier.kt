@@ -24,7 +24,7 @@ internal class BaseThresholdVerifier(
         return bytesSinceLastPeriod > maxBytesSinceLastPeriod
     }
 
-    override fun createResult(listener: UsageListener): UsageListener.Result {
+    override fun createResult(params: UsageListener.Params): UsageListener.Result {
         val uid = Process.myUid()
 
         return UsageListener.Result(
@@ -33,7 +33,7 @@ internal class BaseThresholdVerifier(
                         -1, -1, -1, -1,
                         trafficStatsHelper.uidRxBytes(uid),
                         trafficStatsHelper.uidTxBytes(uid),
-                        getTotalBytesSinceLastPeriod(listener.params.periodInMillis)))
+                        getTotalBytesSinceLastPeriod(params.periodInMillis)))
     }
 
     private fun getTotalBytesSinceLastPeriod(periodInMillis: Long): Long {

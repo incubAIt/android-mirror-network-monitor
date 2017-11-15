@@ -24,8 +24,8 @@ class ThresholdVerifierCompat(context: Context) : ThresholdVerifier {
         return IMPL.isThresholdReached(listener)
     }
 
-    override fun createResult(listener: UsageListener): UsageListener.Result {
-        return IMPL.createResult(listener)
+    override fun createResult(params: UsageListener.Params): UsageListener.Result {
+        return IMPL.createResult(params)
     }
 
 }
