@@ -75,6 +75,6 @@ class PermissionHelper {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     fun hasGetUsageStatsPermission(appOps: AppOpsManager, packageName: String): Boolean {
-        return appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, myUid, packageName) == AppOpsManager.MODE_ALLOWED;
+        return appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, myUid, packageName) == AppOpsManager.MODE_ALLOWED
     }
 }

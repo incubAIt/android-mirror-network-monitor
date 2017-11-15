@@ -57,6 +57,7 @@ public class SampleActivity extends AppCompatActivity {
     }
 
     private void onRequestClicked() {
-        //TODO
+        startActivity(
+                new Intent(this, PermissionsDialogActivity.class));
     }
 }
