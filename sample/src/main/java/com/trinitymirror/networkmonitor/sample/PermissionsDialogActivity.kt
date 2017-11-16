@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor
+package com.trinitymirror.networkmonitor.sample
 
 import android.Manifest
 import android.app.Activity
@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.trinitymirror.networkmonitor.R
 import com.trinitymirror.networkmonitor.permission.PermissionHelper
 
 class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
@@ -116,9 +117,7 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
         Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
     }
 
-    override fun getActivity(): Activity {
-        return this
-    }
+    override fun getActivity(): Activity = this
 
     override fun requestPhoneStatePermission() {
         ActivityCompat.requestPermissions(

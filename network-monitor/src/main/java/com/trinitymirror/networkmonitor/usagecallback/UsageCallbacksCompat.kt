@@ -14,7 +14,7 @@ internal class UsageCallbacksCompat(private val context: Context) : UsageCallbac
 
     @SuppressLint("NewApi")
     private val IMPL =
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) UsageCallbackRegister.Nougat(context, getNetworkStatsManager())
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) UsageCallbackRegister.Nougat(context, getNetworkStatsManager())
             else UsageCallbackRegister.Empty()
 
     override fun registerUsageCallback(listener: UsageListener) {

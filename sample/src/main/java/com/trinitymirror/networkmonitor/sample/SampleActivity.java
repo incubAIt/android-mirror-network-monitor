@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor;
+package com.trinitymirror.networkmonitor.sample;
 
 import android.content.Intent;
 import android.os.Build;
@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.trinitymirror.networkmonitor.R;
 import com.trinitymirror.networkmonitor.permission.PermissionHelper;
 
 public class SampleActivity extends AppCompatActivity {

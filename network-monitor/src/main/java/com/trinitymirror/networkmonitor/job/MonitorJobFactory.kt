@@ -29,7 +29,7 @@ internal class MonitorJobFactory(
                     .setService(MonitorJobService::class.java)
                     .setTag("network-monitor-job-service")
                     .setRecurring(true)
-                    .setLifetime(Lifetime.FOREVER)
+                    .setLifetime(Lifetime.UNTIL_NEXT_BOOT)
                     .setReplaceCurrent(true)
                     .setRetryStrategy(RetryStrategy.DEFAULT_EXPONENTIAL)
                     .setTrigger(jobTrigger)

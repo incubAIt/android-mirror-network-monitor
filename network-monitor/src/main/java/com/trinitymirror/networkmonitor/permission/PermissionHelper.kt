@@ -33,7 +33,7 @@ class PermissionHelper {
     }
 
     fun hasPermissionToReadNetworkHistory(context: Context): Boolean {
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return true
         }
 

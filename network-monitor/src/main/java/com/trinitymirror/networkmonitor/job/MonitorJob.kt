@@ -1,5 +1,6 @@
 package com.trinitymirror.networkmonitor.job
 
+import android.util.Log
 import com.trinitymirror.networkmonitor.NetworkMonitor
 import com.trinitymirror.networkmonitor.NetworkMonitorServiceLocator
 import com.trinitymirror.networkmonitor.UsageListener
@@ -24,6 +25,8 @@ class MonitorJob(
     }
 
     private fun executeAsync() {
+        Log.d(TAG, "Running network monitor job: ${NetworkMonitor.with().networkListeners}")
+
         NetworkMonitor.with()
                 .networkListeners
                 .filter { hasNotTriggeredDuringLastPeriod(it) }
@@ -43,11 +46,16 @@ class MonitorJob(
     }
 
     private fun handleThresholdReached(listener: UsageListener) {
+        Log.d(TAG, "Threshold reached on $listener")
         val result = thresholdVerifier.createResult(listener.params)
 
         listener.callback.onMaxBytesReached(result)
 
         jobPreferences.setLastNotificationTimestamp(
                 listener.id, System.currentTimeMillis())
+    }
+
+    companion object {
+        const val TAG = "MonitorJob"
     }
 }

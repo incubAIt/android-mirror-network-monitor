@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Process
 import android.support.annotation.RequiresApi
 import android.support.v4.util.SparseArrayCompat
+import android.util.Log
 import com.trinitymirror.networkmonitor.UsageListener
 import com.trinitymirror.networkmonitor.stats.NetworkStatsHelper
 import com.trinitymirror.networkmonitor.stats.Utils
@@ -52,8 +53,9 @@ internal interface UsageCallbackRegister {
                     ConnectivityManager.TYPE_MOBILE else ConnectivityManager.TYPE_WIFI
 
         open fun onThresholdReached(listener: UsageListener) {
-            listener.callback.onMaxBytesReached(buildResult(listener))
+            Log.d("UsageCallbackRegister", "Threshold reached on $listener")
 
+            listener.callback.onMaxBytesReached(buildResult(listener))
             unregisterUsageCallback(listener)
         }
 

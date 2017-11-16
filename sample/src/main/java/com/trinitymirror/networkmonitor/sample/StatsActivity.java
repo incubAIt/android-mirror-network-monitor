@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor;
+package com.trinitymirror.networkmonitor.sample;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +9,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.android.gms.drive.sample.quickstart.UploadPictureActivity;
+import com.trinitymirror.networkmonitor.NetworkMonitor;
+import com.trinitymirror.networkmonitor.R;
+import com.trinitymirror.networkmonitor.UsageListener;
 
 import java.io.IOException;
 import java.util.Locale;

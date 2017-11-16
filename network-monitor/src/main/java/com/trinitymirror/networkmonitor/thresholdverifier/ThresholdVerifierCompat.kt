@@ -14,7 +14,7 @@ class ThresholdVerifierCompat(context: Context) : ThresholdVerifier {
 
     @SuppressLint("NewApi")
     private val IMPL =
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) MarshmallowThresholdVerifier(context)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) MarshmallowThresholdVerifier(context)
             else BaseThresholdVerifier(
                     NetworkMonitorServiceLocator.provideTrafficStatsHelper(),
                     NetworkMonitorServiceLocator.provideJobPreferences(),

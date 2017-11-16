@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.trinitymirror.networkmonitor.PermissionsDialogActivity">
+    tools:context="com.trinitymirror.networkmonitor.sample.PermissionsDialogActivity">
 
     <include
         layout="@layout/activity_permissions_dialog_network_history"
