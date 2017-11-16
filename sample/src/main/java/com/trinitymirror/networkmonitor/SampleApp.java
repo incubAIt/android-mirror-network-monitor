@@ -25,12 +25,6 @@ public class SampleApp extends Application {
                 .registerListener(createListener());
     }
 
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
-
     private UsageListener createListener() {
         return new UsageListener(1,
                 new UsageListener.Params(
@@ -72,6 +66,12 @@ public class SampleApp extends Application {
 
         NotificationManager mNotifyMgr = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         mNotifyMgr.notify(001, mBuilder.build());
+    }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
     }
 
 }

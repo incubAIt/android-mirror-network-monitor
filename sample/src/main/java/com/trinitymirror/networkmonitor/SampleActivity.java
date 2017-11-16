@@ -57,7 +57,6 @@ public class SampleActivity extends AppCompatActivity {
     }
 
     private void onRequestClicked() {
-        startActivity(
-                new Intent(this, PermissionsDialogActivity.class));
+        PermissionsDialogActivity.open(this, "SampleApp");
     }
 }
