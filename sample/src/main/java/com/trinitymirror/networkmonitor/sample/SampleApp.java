@@ -13,7 +13,6 @@ import android.support.v4.app.NotificationCompat;
 
 import com.trinitymirror.networkmonitor.NetworkMonitor;
 import com.trinitymirror.networkmonitor.NetworkMonitorServiceLocator;
-import com.trinitymirror.networkmonitor.R;
 import com.trinitymirror.networkmonitor.UsageListener;
 
 import java.util.concurrent.TimeUnit;

@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.trinitymirror.networkmonitor">
+    package="com.trinitymirror.networkmonitor.sample">
 
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".sample.SampleApp"
+        android:name="com.trinitymirror.networkmonitor.sample.SampleApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/MirrorNetworkMonitor.Theme">
-        <activity android:name=".sample.SampleActivity">
+        <activity android:name="com.trinitymirror.networkmonitor.sample.SampleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".sample.StatsActivity" />
+        <activity android:name="com.trinitymirror.networkmonitor.sample.StatsActivity" />
         <activity android:name="com.google.android.gms.drive.sample.quickstart.UploadPictureActivity" />
         <activity
-            android:name=".sample.PermissionsDialogActivity"
+            android:name="com.trinitymirror.networkmonitor.sample.PermissionsDialogActivity"
             android:launchMode="singleInstance"
             android:theme="@style/MirrorNetworkMonitor.PermissionsDialog" />
 

@@ -10,7 +10,6 @@ import android.widget.TextView;
 
 import com.google.android.gms.drive.sample.quickstart.UploadPictureActivity;
 import com.trinitymirror.networkmonitor.NetworkMonitor;
-import com.trinitymirror.networkmonitor.R;
 import com.trinitymirror.networkmonitor.UsageListener;
 
 import java.io.IOException;
@@ -77,7 +76,7 @@ public class StatsActivity extends AppCompatActivity {
         long wifiRx = result.getExtras().getRxWifi();
         rxWifiTextView.setText(formatBytes(wifiRx));
 
-        long mobileWifiRx = mobileRx + wifiRx;
+        long mobileWifiRx = result.getExtras().getRxBytes();
         rxTotalTextView.setText(formatBytes(mobileWifiRx));
 
         long mobileTx = result.getExtras().getTxMobile();
@@ -86,10 +85,11 @@ public class StatsActivity extends AppCompatActivity {
         long wifiTx = result.getExtras().getTxWifi();
         txWifiTextView.setText(formatBytes(wifiTx));
 
-        long mobileWifiTx = mobileTx + wifiTx;
+        long mobileWifiTx = result.getExtras().getTxBytes();
         txTotalTextView.setText(formatBytes(mobileWifiTx));
 
         long totalEstimatedBytes = result.getExtras().getEstimatedBytes();
+        Log.d("TAG", "estimated bytes: " + totalEstimatedBytes);
         totalEstimated.setText(formatBytes(totalEstimatedBytes));
     }
 
