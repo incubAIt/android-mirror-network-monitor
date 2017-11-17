@@ -8,6 +8,7 @@
     android:layout_gravity="center"
     android:layout_marginEnd="32dp"
     android:layout_marginStart="32dp"
+    android:maxWidth="400dp"
     android:background="@drawable/mirror_network_monitor_dialog_background"
     android:elevation="6dp"
     android:paddingBottom="8dp">
@@ -44,8 +45,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_permissions_dialog_network_history_title" />
 
-
-    <FrameLayout
+    <com.trinitymirror.networkmonitor.ui.UsageAccessView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -54,63 +54,7 @@
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_permissions_dialog_network_history_description">
-
-        <ImageView
-            android:id="@+id/activity_permissions_dialog_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/mirror_network_monitor_dialog_permisssion_frame" />
-
-        <Switch
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
-            android:layout_marginBottom="16dp"
-            android:layout_marginRight="16dp"
-            android:checked="true"
-            tools:ignore="RtlHardcoded" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|left"
-            android:layout_marginBottom="24dp"
-            android:layout_marginLeft="16dp"
-            android:fontFamily="sans-serif"
-            android:textSize="12sp"
-            android:text="Permit Usage Access"/>
-
-        <ImageView
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginTop="50dp"
-            tools:background="@android:color/holo_blue_dark"
-            tools:ignore="RtlHardcoded" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginTop="52dp"
-            android:fontFamily="sans-serif-medium"
-            android:textSize="14sp"
-            android:textColor="#CCD8DC"
-            tools:text="Mirror App" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="48dp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="sans-serif-medium"
-            android:textSize="14sp"
-            android:textColor="@android:color/white"
-            android:text="Usage Access" />
-
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/activity_permissions_dialog_network_history_description"/>
 
     <Button
         android:id="@+id/activity_permissions_dialog_network_history_settings_btn"
