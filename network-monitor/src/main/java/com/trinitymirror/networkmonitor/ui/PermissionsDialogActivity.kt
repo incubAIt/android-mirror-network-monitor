@@ -40,6 +40,7 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
     private lateinit var usageStatsDescriptionTextView: TextView
     private lateinit var usageStatsDismissButton: Button
     private lateinit var usageStatsGotoSettingsButton: Button
+    private lateinit var usageStatsUsageAccessView: UsageAccessView
 
     private lateinit var phoneStateLayout: ConstraintLayout
     private lateinit var phoneStateTitleTextView: TextView
@@ -65,6 +66,7 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
         val appName = getExtraAppName()
         usageStatsDescriptionTextView.text = getString(R.string.mirror_network_monitor_dialog_network_history_description, appName)
         phoneStateDescriptionTextView.text = getString(R.string.mirror_network_monitor_dialog_phone_state_description, appName)
+        usageStatsUsageAccessView.bind(appName, 0)
     }
 
     private fun findViews() {
@@ -73,6 +75,7 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
         usageStatsDescriptionTextView = usageStatsLayout.findViewById(R.id.activity_permissions_dialog_network_history_description)
         usageStatsDismissButton = usageStatsLayout.findViewById(R.id.activity_permissions_dialog_network_history_dismiss_btn)
         usageStatsGotoSettingsButton = usageStatsLayout.findViewById(R.id.activity_permissions_dialog_network_history_settings_btn)
+        usageStatsUsageAccessView = usageStatsLayout.findViewById(R.id.activity_permissions_dialog_usage_access_view)
 
         phoneStateLayout = findViewById(R.id.activity_permissions_dialog_phone_state_layout)
         phoneStateTitleTextView = phoneStateLayout.findViewById(R.id.activity_permissions_dialog_phone_state_title)
