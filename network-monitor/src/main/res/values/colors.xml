@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mirror_network_monitor_dialog_scrim">#99323232</color>
+    <color name="mirror_network_monitor_dialog_bg">#fafafa</color>
+</resources>

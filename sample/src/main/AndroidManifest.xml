@@ -22,10 +22,6 @@
         </activity>
         <activity android:name="com.trinitymirror.networkmonitor.sample.StatsActivity" />
         <activity android:name="com.google.android.gms.drive.sample.quickstart.UploadPictureActivity" />
-        <activity
-            android:name="com.trinitymirror.networkmonitor.sample.PermissionsDialogActivity"
-            android:launchMode="singleInstance"
-            android:theme="@style/MirrorNetworkMonitor.PermissionsDialog" />
 
         <meta-data
             android:name="com.google.android.gms.version"

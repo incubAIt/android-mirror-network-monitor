@@ -2,13 +2,4 @@
     <string name="app_name">Network Monitor</string>
     <string name="has_permissions">Has permissions: %b</string>
     <string name="android_api">API = %d</string>
-    <string name="mirror_network_monitor_usage_stats_toast">Please allow access for %s</string>
-    <string name="mirror_network_monitor_dialog_title">Network Monitor</string>
-    <string name="mirror_network_monitor_dialog_network_history_description">We are continuously looking to optimise our users data consumption and would like to monitor %s data traffic. To help us, please turn on Permit Usage Access in your devices settings</string>
-    <string name="mirror_network_monitor_dialog_phone_state_description">Great! Also, to allow us to track the traffic on your mobile network, please give %s access to your phone state.</string>
-    <string name="mirror_network_monitor_dialog_success_description">That\'s it! We\'re now able to monitor the data usage. You can always turn it off in the App Settings</string>
-    <string name="mirror_network_monitor_dialog_settings">Go to settings</string>
-    <string name="mirror_network_monitor_dialog_dismiss">DISMISS</string>
-    <string name="mirror_network_monitor_dialog_next">NEXT</string>
-    <string name="mirror_network_monitor_dialog_success">Done</string>
 </resources>

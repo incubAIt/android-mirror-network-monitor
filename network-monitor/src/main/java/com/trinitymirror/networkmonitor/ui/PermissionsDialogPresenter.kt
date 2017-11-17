@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor.sample
+package com.trinitymirror.networkmonitor.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -50,11 +50,11 @@ class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
         if (!permissionHelper.hasPermissionToReadPhoneState(view.getActivity())) {
             view.requestPhoneStatePermission()
         } else {
+            val intent = Intent(view.getActivity(), PermissionsDialogActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
             view.finish()
             view.getActivity()
-                    .startActivity(
-                            Intent(view.getActivity(), SampleActivity::class.java)
-                                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+                    .startActivity(intent)
         }
     }
 

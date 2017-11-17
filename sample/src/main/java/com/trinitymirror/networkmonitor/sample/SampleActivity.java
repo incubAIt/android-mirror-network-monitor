@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.trinitymirror.networkmonitor.permission.PermissionHelper;
+import com.trinitymirror.networkmonitor.ui.PermissionsDialogActivity;
 
 public class SampleActivity extends AppCompatActivity {
 

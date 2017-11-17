@@ -1,4 +1,4 @@
-package com.trinitymirror.networkmonitor.sample
+package com.trinitymirror.networkmonitor.ui
 
 import android.Manifest
 import android.app.Activity
@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import com.trinitymirror.networkmonitor.R
 import com.trinitymirror.networkmonitor.permission.PermissionHelper
 
 class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {

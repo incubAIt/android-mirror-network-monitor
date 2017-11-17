@@ -19,5 +19,11 @@
                 <action android:name="com.firebase.jobdispatcher.ACTION_EXECUTE"/>
             </intent-filter>
         </service>
+
+        <activity
+            android:name="com.trinitymirror.networkmonitor.ui.PermissionsDialogActivity"
+            android:launchMode="singleInstance"
+            android:theme="@style/MirrorNetworkMonitor.PermissionsDialog" />
+
     </application>
 </manifest>
