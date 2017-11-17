@@ -7,10 +7,10 @@ class JobSharedPreferences(context: Context) : JobPreferences {
 
     companion object {
         const val KEY_LAST_NOTIFICATION_TIMESTAMP_PREFIX = "listener_id=%s"
-        const val KEY_LAST_BOOT_OFFSET = ""
-        const val KEY_LAST_TRAFFIC_STATS = ""
-        const val KEY_LAST_PERIOD_TICK = ""
-        const val KEY_LAST_PERIOD_OFFSET = ""
+        const val KEY_LAST_BOOT_OFFSET = "key_last_boot_offset"
+        const val KEY_LAST_TRAFFIC_STATS = "key_last_traffic_stats"
+        const val KEY_LAST_PERIOD_TICK = "key_last_period_tick"
+        const val KEY_LAST_PERIOD_OFFSET = "key_last_period_offset"
     }
 
     private val sharedPref = context.getSharedPreferences(

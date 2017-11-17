@@ -13,6 +13,9 @@ import org.amshove.kluent.mock
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
+import java.text.DateFormat
+import java.util.*
+import java.util.concurrent.TimeUnit
 
 internal class BaseThresholdVerifierTest : BaseTest() {
 
@@ -29,11 +32,15 @@ internal class BaseThresholdVerifierTest : BaseTest() {
     override fun setUp() {
         super.setUp()
 
+        init()
+    }
+
+    fun init(period: Long = periodInMillis, maxBytes: Long = maxBytesSinceLastPeriod) {
         thresholdVerifier = BaseThresholdVerifier(
                 trafficStatsHelper, InMemoryPreferences(), currentTime)
 
         listener = UsageListenerMother.create(1,
-                params(maxBytesSinceLastPeriod = maxBytesSinceLastPeriod, periodInMillis = periodInMillis))
+                params(maxBytesSinceLastPeriod = maxBytes, periodInMillis = period))
     }
 
     @Test
@@ -83,10 +90,35 @@ internal class BaseThresholdVerifierTest : BaseTest() {
         verifyWhen(14, 10, false)   // total = 10
     }
 
+    @Test
+    fun `test with real timestamps`() {
+        init(period = TimeUnit.DAYS.toMillis(1))
+
+        calculateWhen("16 November 2017 15:23:18 WET", 0, 0)
+        calculateWhen("16 November 2017 15:23:30 WET", 965, 965)
+        calculateWhen("16 November 2017 15:24:03 WET", 965, 965)
+    }
+
     fun verifyWhen(currentTimeValue: Long, currentTraffic: Long, isThresholdReached: Boolean) {
+        (thresholdVerifier as BaseThresholdVerifier).totalBytesSinceLastPeriod = -1
+
         whenever(currentTime.obtain()).thenReturn(currentTimeValue)
         whenever(trafficStatsHelper.uidBytes(any())).thenReturn(currentTraffic)
-        assertEquals("expected thresholdReached=${isThresholdReached}, when currentTime=${currentTimeValue} and currentTraffic=${currentTraffic}",
+        assertEquals("expected thresholdReached=$isThresholdReached, when currentTime=$currentTimeValue and currentTraffic=$currentTraffic",
                 isThresholdReached, thresholdVerifier.isThresholdReached(listener))
+    }
+
+    fun calculateWhen(currentTimeValue: String, currentTraffic: Long, expectedResult: Long) {
+        (thresholdVerifier as BaseThresholdVerifier).totalBytesSinceLastPeriod = -1
+
+        whenever(currentTime.obtain()).thenReturn(parseTimestamp(currentTimeValue))
+        whenever(trafficStatsHelper.uidBytes(any())).thenReturn(currentTraffic)
+        assertEquals("expected expectedResult=$expectedResult, when currentTime=$currentTimeValue and currentTraffic=$currentTraffic",
+                expectedResult, thresholdVerifier.createResult(listener.params).extras.estimatedBytes)
+    }
+
+    fun parseTimestamp(dateTime: String): Long {
+        return DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.LONG, Locale.UK)
+                .parse(dateTime).time
     }
 }
