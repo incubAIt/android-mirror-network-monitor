@@ -1,5 +1,6 @@
 package com.trinitymirror.networkmonitor.sample;
 
+import android.app.AppOpsManager;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -19,6 +20,8 @@ import java.util.concurrent.TimeUnit;
 
 public class SampleApp extends Application {
 
+    static final Long PERIOD_IN_MILLIS = TimeUnit.HOURS.toMillis(12);
+
     @Override
     public void onCreate() {
         super.onCreate();
@@ -35,9 +38,9 @@ public class SampleApp extends Application {
     private UsageListener createListener() {
         return new UsageListener(1,
                 new UsageListener.Params(
-                        mb(10),
-                        mb(20),
-                        TimeUnit.DAYS.toMillis(1),
+                        mb(40),
+                        mb(80),
+                        PERIOD_IN_MILLIS,
                         UsageListener.NetworkType.WIFI
                 ),
                 this::showNotification);

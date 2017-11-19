@@ -12,10 +12,9 @@ import android.os.Process
 import android.provider.Settings
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
+import java.lang.ref.WeakReference
 
 class PermissionHelper {
-
-    private val myUid = Process.myUid()
 
     fun hasPermissions(context: Context): Boolean {
         return hasPermissionToReadNetworkHistory(context) &&
@@ -49,22 +48,38 @@ class PermissionHelper {
         }
 
         val appOps = activity.getSystemService(Context.APP_OPS_SERVICE) as AppOpsManager
-        val onOpChangedListener = object : AppOpsManager.OnOpChangedListener {
-            override fun onOpChanged(op: String, packageName: String) {
-                if (hasGetUsageStatsPermission(appOps, packageName)) {
-                    appOps.stopWatchingMode(this)
-                    onPermissionGranted.invoke()
-                }
-            }
-        }
-        appOps.startWatchingMode(AppOpsManager.OPSTR_GET_USAGE_STATS, activity.packageName, onOpChangedListener)
+        appOps.startWatchingMode(
+                AppOpsManager.OPSTR_GET_USAGE_STATS,
+                activity.packageName,
+                PermissionChangedListener(appOps, onPermissionGranted))
 
         val intent = Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS)
         activity.startActivity(intent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun hasGetUsageStatsPermission(appOps: AppOpsManager, packageName: String): Boolean {
-        return appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, myUid, packageName) == AppOpsManager.MODE_ALLOWED
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    internal class PermissionChangedListener(
+            private val appOps: AppOpsManager,
+            permissionGrantedLambda: () -> Unit) : AppOpsManager.OnOpChangedListener {
+
+        private val permissionGrantedWeakRef = WeakReference(permissionGrantedLambda)
+
+        override fun onOpChanged(op: String, packageName: String) {
+            permissionGrantedWeakRef.get()?.let {
+                if (hasGetUsageStatsPermission(appOps, packageName)) {
+                    appOps.stopWatchingMode(this)
+                    it.invoke()
+                }
+            }
+        }
+    }
+
+    companion object {
+
+        private val myUid = Process.myUid()
+
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+        private fun hasGetUsageStatsPermission(appOps: AppOpsManager, packageName: String): Boolean =
+                appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS, myUid, packageName) == AppOpsManager.MODE_ALLOWED
     }
 }

@@ -68,7 +68,7 @@ public class StatsActivity extends AppCompatActivity {
     private void fillStats() {
         UsageListener.Result result = NetworkMonitor.with().obtainCurrentStats(
                 new UsageListener.Params(0, 0,
-                        (int) TimeUnit.DAYS.toMillis(15), UsageListener.NetworkType.WIFI));
+                        SampleApp.PERIOD_IN_MILLIS, UsageListener.NetworkType.WIFI));
 
         long mobileRx = result.getExtras().getRxMobile();
         rxMobileTextView.setText(formatBytes(mobileRx));

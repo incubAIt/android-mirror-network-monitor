@@ -37,9 +37,6 @@ class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
             PermissionsDialogActivity.reopen(view.getActivity(), appName)
         })
         view.showUsageStatsToast(appName)
-
-
-        //TODO Watch-out for memory leaks, when user runs away from the settings screen
     }
 
     fun onDismissClicked() {
