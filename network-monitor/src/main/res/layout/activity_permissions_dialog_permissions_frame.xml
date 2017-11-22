@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v7.widget.AppCompatImageView
@@ -15,50 +15,45 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
+        android:layout_marginBottom="@dimen/amnm_gap_medium"
+        android:layout_marginRight="@dimen/amnm_gap_medium"
         android:checked="false"
         android:clickable="false"
         tools:ignore="RtlHardcoded" />
 
     <TextView
+        style="@style/amnm_permission_frame_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|left"
-        android:layout_marginBottom="24dp"
-        android:layout_marginLeft="16dp"
-        android:fontFamily="sans-serif"
-        android:textSize="12sp"
+        android:layout_marginBottom="@dimen/amnm_gap_medium_large"
+        android:layout_marginLeft="@dimen/amnm_gap_medium"
         android:text="Permit Usage Access" />
 
     <ImageView
         android:id="@+id/mirror_network_monitor_permisssion_frame_icon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_marginLeft="16dp"
+        android:layout_width="@dimen/amnm_gap_medium_large"
+        android:layout_height="@dimen/amnm_gap_medium_large"
+        android:layout_marginLeft="@dimen/amnm_gap_medium"
         android:layout_marginTop="50dp"
         tools:background="@android:color/holo_blue_dark"
         tools:ignore="RtlHardcoded" />
 
     <TextView
         android:id="@+id/mirror_network_monitor_permisssion_frame_app_name"
+        style="@style/amnm_permission_frame_app_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="48dp"
         android:layout_marginTop="52dp"
-        android:fontFamily="sans-serif-medium"
-        android:textSize="14sp"
-        android:textColor="#CCD8DC"
         tools:text="Mirror App" />
 
     <TextView
+        style="@style/amnm_permission_frame_inside_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="48dp"
         android:layout_marginTop="10dp"
-        android:fontFamily="sans-serif-medium"
-        android:textSize="14sp"
-        android:textColor="@android:color/white"
         android:text="Usage Access" />
 
 </merge>

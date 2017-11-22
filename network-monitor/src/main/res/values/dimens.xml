@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="mirror_network_monitor_dialog_corners">2dp</dimen>
+    <dimen name="amnm_dialog_corners">2dp</dimen>
+    <dimen name="amnm_gap_small">8dp</dimen>
+    <dimen name="amnm_gap_medium">16dp</dimen>
+    <dimen name="amnm_gap_medium_large">24dp</dimen>
+    <dimen name="amnm_gap_large">32dp</dimen>
+    <dimen name="amnm_dialog_max_width">400dp</dimen>
+    <dimen name="amnm_dialog_title_text_size">20sp</dimen>
+    <dimen name="amnm_dialog_description_text_size">14sp</dimen>
 </resources>

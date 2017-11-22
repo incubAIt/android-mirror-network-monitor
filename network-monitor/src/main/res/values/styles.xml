@@ -1,4 +1,36 @@
 <resources>
 
+    <style name="amnm_dialog_title">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:lineSpacingExtra">@dimen/amnm_gap_small</item>
+        <item name="android:textSize">@dimen/amnm_dialog_title_text_size</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:textColor">?attr/android_mirror_network_monitor_dialog_title_color
+        </item>
+    </style>
 
+    <style name="amnm_dialog_description">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:lineSpacingExtra">10sp</item>
+        <item name="android:textColor">#89000000</item>
+        <item name="android:textSize">@dimen/amnm_dialog_description_text_size</item>
+        <item name="android:textStyle">normal</item>
+    </style>
+
+    <style name="amnm_permission_frame_title">
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="amnm_permission_frame_app_name">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">#CCD8DC</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="amnm_permission_frame_inside_text">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="android:textSize">14sp</item>
+    </style>
 </resources>

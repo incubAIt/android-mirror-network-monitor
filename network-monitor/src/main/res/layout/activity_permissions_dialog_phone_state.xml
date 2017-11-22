@@ -5,41 +5,32 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center"
-    android:layout_marginEnd="32dp"
-    android:layout_marginStart="32dp"
+    android:layout_marginEnd="@dimen/amnm_gap_large"
+    android:layout_marginStart="@dimen/amnm_gap_large"
     android:background="@drawable/mirror_network_monitor_dialog_background"
     android:elevation="6dp"
-    android:paddingBottom="8dp">
+    android:paddingBottom="@dimen/amnm_gap_small">
 
     <TextView
         android:id="@+id/activity_permissions_dialog_phone_state_title"
+        style="@style/amnm_dialog_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:lineSpacingExtra="8sp"
+        android:layout_marginStart="@dimen/amnm_gap_medium_large"
+        android:layout_marginTop="@dimen/amnm_gap_medium"
         android:text="@string/mirror_network_monitor_dialog_title"
-        android:textSize="20sp"
-        android:textStyle="normal"
-        android:textColor="?attr/android_mirror_network_monitor_dialog_title_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
     <TextView
         android:id="@+id/activity_permissions_dialog_phone_state_description"
+        style="@style/amnm_dialog_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginTop="16dp"
-        android:fontFamily="sans-serif-medium"
-        android:lineSpacingExtra="10sp"
+        android:layout_marginEnd="@dimen/amnm_gap_medium_large"
+        android:layout_marginStart="@dimen/amnm_gap_medium_large"
+        android:layout_marginTop="@dimen/amnm_gap_medium"
         android:text="@string/mirror_network_monitor_dialog_phone_state_description"
-        android:textColor="#89000000"
-        android:textSize="14sp"
-        android:textStyle="normal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_permissions_dialog_phone_state_title" />
@@ -49,8 +40,8 @@
         style="@style/Widget.AppCompat.Button.Colored"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="24dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/amnm_gap_medium_large"
+        android:layout_marginTop="@dimen/amnm_gap_medium"
         android:text="@string/mirror_network_monitor_dialog_next"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activity_permissions_dialog_phone_state_description" />
@@ -60,8 +51,8 @@
         style="@style/Widget.AppCompat.Button.Borderless"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="@dimen/amnm_gap_small"
+        android:layout_marginTop="@dimen/amnm_gap_medium"
         android:text="@string/mirror_network_monitor_dialog_dismiss"
         app:layout_constraintEnd_toStartOf="@+id/activity_permissions_dialog_phone_state_next_btn"
         app:layout_constraintTop_toBottomOf="@+id/activity_permissions_dialog_phone_state_description" />

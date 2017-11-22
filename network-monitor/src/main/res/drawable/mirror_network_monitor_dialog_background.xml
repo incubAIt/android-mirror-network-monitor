@@ -2,6 +2,6 @@
 <shape
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
-    <corners android:radius="@dimen/mirror_network_monitor_dialog_corners" />
+    <corners android:radius="@dimen/amnm_dialog_corners" />
     <solid android:color="@color/mirror_network_monitor_dialog_bg" />
 </shape>
