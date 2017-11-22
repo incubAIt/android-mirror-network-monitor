@@ -24,6 +24,7 @@
         android:text="@string/mirror_network_monitor_dialog_title"
         android:textSize="20sp"
         android:textStyle="normal"
+        android:textColor="?attr/android_mirror_network_monitor_dialog_title_color"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

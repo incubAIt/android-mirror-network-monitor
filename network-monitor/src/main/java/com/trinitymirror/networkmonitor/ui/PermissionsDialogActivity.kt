@@ -127,7 +127,7 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
                 this, arrayOf(Manifest.permission.READ_PHONE_STATE), REQ_CODE)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray) {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
 
         val granted = requestCode == REQ_CODE &&
                 grantResults.isNotEmpty() &&
@@ -136,9 +136,7 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
         presenter.onPhoneStatePermissionResult(granted)
     }
 
-    private fun getExtraAppName(): String {
-        return intent.extras.getString(EXTRA_APP_NAME)
-    }
+    private fun getExtraAppName() = intent.extras.getString(EXTRA_APP_NAME)
 
     private fun checkMandatoryExtra(key: String) {
         if (!intent.extras.containsKey(key)) {

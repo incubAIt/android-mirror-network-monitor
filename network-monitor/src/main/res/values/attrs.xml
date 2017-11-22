@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="android_mirror_network_monitor_dialog_title_color" format="color"/>
+</resources>
