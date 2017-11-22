@@ -2,6 +2,7 @@ package com.trinitymirror.networkmonitor.ui
 
 import android.app.Activity
 import android.content.Intent
+import com.trinitymirror.networkmonitor.NetworkMonitor
 import com.trinitymirror.networkmonitor.permission.PermissionHelper
 
 class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
@@ -24,7 +25,7 @@ class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
         val context = view.getActivity()
 
         if (permissionHelper.hasPermissions(context)) {
-            view.finish()
+            onPermissionGranted(view)
         } else if (!permissionHelper.hasPermissionToReadNetworkHistory(context)) {
             view.showUsageStatsPermissionScreen()
         } else if (!permissionHelper.hasPermissionToReadPhoneState(context)) {
@@ -40,6 +41,7 @@ class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
     }
 
     fun onDismissClicked() {
+        NetworkMonitor.with().onDialogDismissed()
         view.finish()
     }
 
@@ -47,11 +49,17 @@ class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
         if (!permissionHelper.hasPermissionToReadPhoneState(view.getActivity())) {
             view.requestPhoneStatePermission()
         } else {
-            val intent = Intent(view.getActivity(), PermissionsDialogActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-            view.finish()
-            view.getActivity()
-                    .startActivity(intent)
+            onPermissionGranted(view)
+        }
+    }
+
+    private fun onPermissionGranted(view: View) {
+        view.finish()
+
+        val intent = NetworkMonitor.with().onPermissionGranted()
+        intent?.let {
+            it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            view.getActivity().startActivity(it)
         }
     }
 

@@ -2,13 +2,16 @@ package com.trinitymirror.networkmonitor.sample;
 
 import android.content.Intent;
 import android.os.Build;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.trinitymirror.networkmonitor.NetworkMonitor;
 import com.trinitymirror.networkmonitor.permission.PermissionHelper;
-import com.trinitymirror.networkmonitor.ui.PermissionsDialogActivity;
+
+import org.jetbrains.annotations.Nullable;
 
 public class SampleActivity extends AppCompatActivity {
 
@@ -58,6 +61,21 @@ public class SampleActivity extends AppCompatActivity {
     }
 
     private void onRequestClicked() {
-        PermissionsDialogActivity.open(this, "SampleApp");
+
+        final NetworkMonitor.PermissionDialogResult dialogResult = new NetworkMonitor.PermissionDialogResult() {
+            @Override
+            public void onDismissed() {
+                Toast.makeText(SampleActivity.this, "on dismissed", Toast.LENGTH_SHORT).show();
+            }
+
+            @Nullable
+            @Override
+            public Intent onPermissionGranted() {
+                Toast.makeText(SampleActivity.this, "on permission granted", Toast.LENGTH_SHORT).show();
+                return new Intent(SampleActivity.this, SampleActivity.class);
+            }
+        };
+        NetworkMonitor.with()
+                .openPermissionsDialog(this, "SampleApp", dialogResult);
     }
 }

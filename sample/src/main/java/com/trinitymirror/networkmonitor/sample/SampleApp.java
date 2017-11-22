@@ -1,6 +1,5 @@
 package com.trinitymirror.networkmonitor.sample;
 
-import android.app.AppOpsManager;
 import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationChannel;
