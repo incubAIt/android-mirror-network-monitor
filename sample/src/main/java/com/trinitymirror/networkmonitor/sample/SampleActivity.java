@@ -76,6 +76,8 @@ public class SampleActivity extends AppCompatActivity {
             }
         };
         NetworkMonitor.with()
-                .openPermissionsDialog(this, "SampleApp", dialogResult);
+                .openPermissionsDialog(
+                        this, "SampleApp",
+                        R.mipmap.ic_launcher_round, dialogResult);
     }
 }

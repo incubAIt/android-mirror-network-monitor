@@ -6,7 +6,8 @@ import com.trinitymirror.networkmonitor.NetworkMonitor
 import com.trinitymirror.networkmonitor.permission.PermissionHelper
 
 class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
-                                 private val appName: String) {
+                                 private val appName: String,
+                                 private val appIcon: Int) {
 
     interface View {
         fun getActivity(): Activity
@@ -35,7 +36,7 @@ class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
 
     fun onGotoSettingsClicked() {
         permissionHelper.requestReadNetworkHistoryAccess(view.getActivity(), {
-            PermissionsDialogActivity.reopen(view.getActivity(), appName)
+            PermissionsDialogActivity.reopen(view.getActivity(), appName, appIcon)
         })
         view.showUsageStatsToast(appName)
     }

@@ -57,11 +57,12 @@ class NetworkMonitor private constructor(
             = permissionHelper.hasPermissions(context)
 
     fun openPermissionsDialog(activity: Activity, appName: String,
+                              appIconResId: Int,
                               permissionDialogResult: PermissionDialogResult) {
         permissionResultReference?.clear()
         permissionResultReference = SoftReference(permissionDialogResult)
 
-        PermissionsDialogActivity.open(activity, appName)
+        PermissionsDialogActivity.open(activity, appName, appIconResId)
     }
 
     internal fun onDialogDismissed() {

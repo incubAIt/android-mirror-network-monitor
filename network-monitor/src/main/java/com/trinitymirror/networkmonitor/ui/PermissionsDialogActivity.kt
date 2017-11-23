@@ -18,20 +18,23 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
 
     companion object {
         const val EXTRA_APP_NAME = "extra_name"
+        const val EXTRA_APP_ICON = "extra_icon"
         const val REQ_CODE = 1404
 
         @JvmStatic
-        fun open(activity: Activity, appName: String) {
+        fun open(activity: Activity, appName: String, appIconResId: Int) {
             activity.startActivity(
                     Intent(activity, PermissionsDialogActivity::class.java)
-                            .putExtra(EXTRA_APP_NAME, appName))
+                            .putExtra(EXTRA_APP_NAME, appName)
+                            .putExtra(EXTRA_APP_ICON, appIconResId))
         }
 
-        fun reopen(activity: Activity, appName: String) {
+        fun reopen(activity: Activity, appName: String, appIconResId: Int) {
             activity.finish()
             activity.startActivity(
                     Intent(activity, PermissionsDialogActivity::class.java)
-                            .putExtra(EXTRA_APP_NAME, appName))
+                            .putExtra(EXTRA_APP_NAME, appName)
+                            .putExtra(EXTRA_APP_ICON, appIconResId))
         }
     }
 
@@ -62,11 +65,13 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
 
     private fun bindUi() {
         checkMandatoryExtra(EXTRA_APP_NAME)
+        checkMandatoryExtra(EXTRA_APP_ICON)
 
         val appName = getExtraAppName()
+        val appIcon = getExtraAppIcon()
         usageStatsDescriptionTextView.text = getString(R.string.mirror_network_monitor_dialog_network_history_description, appName)
         phoneStateDescriptionTextView.text = getString(R.string.mirror_network_monitor_dialog_phone_state_description, appName)
-        usageStatsUsageAccessView.bind(appName, 0)
+        usageStatsUsageAccessView.bind(appName, appIcon)
     }
 
     private fun findViews() {
@@ -93,8 +98,7 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
     }
 
     private fun initPresenter() {
-        val appName = getExtraAppName()
-        presenter = PermissionsDialogPresenter(PermissionHelper(), appName)
+        presenter = PermissionsDialogPresenter(PermissionHelper(), getExtraAppName(), getExtraAppIcon())
         presenter.register(this)
     }
 
@@ -142,6 +146,8 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
     }
 
     private fun getExtraAppName() = intent.extras.getString(EXTRA_APP_NAME)
+
+    private fun getExtraAppIcon() = intent.extras.getInt(EXTRA_APP_ICON)
 
     private fun checkMandatoryExtra(key: String) {
         if (!intent.extras.containsKey(key)) {
