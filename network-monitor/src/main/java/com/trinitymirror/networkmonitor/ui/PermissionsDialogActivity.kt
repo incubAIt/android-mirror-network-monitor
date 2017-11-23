@@ -120,6 +120,11 @@ class PermissionsDialogActivity : Activity(), PermissionsDialogPresenter.View {
         Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        presenter.onBackPressed()
+    }
+
     override fun getActivity(): Activity = this
 
     override fun requestPhoneStatePermission() {

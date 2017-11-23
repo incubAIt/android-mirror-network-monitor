@@ -12,7 +12,7 @@ import android.os.Process
 import android.provider.Settings
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
-import java.lang.ref.WeakReference
+import java.lang.ref.SoftReference
 
 class PermissionHelper {
 
@@ -62,7 +62,7 @@ class PermissionHelper {
             private val appOps: AppOpsManager,
             permissionGrantedLambda: () -> Unit) : AppOpsManager.OnOpChangedListener {
 
-        private val permissionGrantedWeakRef = WeakReference(permissionGrantedLambda)
+        private val permissionGrantedWeakRef = SoftReference(permissionGrantedLambda)
 
         override fun onOpChanged(op: String, packageName: String) {
             permissionGrantedWeakRef.get()?.let {

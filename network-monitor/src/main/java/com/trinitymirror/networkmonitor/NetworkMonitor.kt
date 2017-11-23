@@ -7,7 +7,7 @@ import com.trinitymirror.networkmonitor.job.MonitorJobFactory
 import com.trinitymirror.networkmonitor.permission.PermissionHelper
 import com.trinitymirror.networkmonitor.ui.PermissionsDialogActivity
 import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
-import java.lang.ref.WeakReference
+import java.lang.ref.SoftReference
 
 /**
  * NetworkMonitor is the main entry-point for the library, allowing users to register/unregister
@@ -20,7 +20,7 @@ class NetworkMonitor private constructor(
 
     internal val networkListeners = mutableListOf<UsageListener>()
 
-    private var permissionResultReference: WeakReference<PermissionDialogResult>? = null
+    private var permissionResultReference: SoftReference<PermissionDialogResult>? = null
 
     fun registerListener(listener: UsageListener) {
         usageCallbacks.registerUsageCallback(listener)
@@ -59,7 +59,7 @@ class NetworkMonitor private constructor(
     fun openPermissionsDialog(activity: Activity, appName: String,
                               permissionDialogResult: PermissionDialogResult) {
         permissionResultReference?.clear()
-        permissionResultReference = WeakReference(permissionDialogResult)
+        permissionResultReference = SoftReference(permissionDialogResult)
 
         PermissionsDialogActivity.open(activity, appName)
     }

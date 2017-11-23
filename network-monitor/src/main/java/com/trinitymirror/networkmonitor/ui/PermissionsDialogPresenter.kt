@@ -45,6 +45,10 @@ class PermissionsDialogPresenter(private val permissionHelper: PermissionHelper,
         view.finish()
     }
 
+    fun onBackPressed() {
+        NetworkMonitor.with().onDialogDismissed()
+    }
+
     fun onNextClicked() {
         if (!permissionHelper.hasPermissionToReadPhoneState(view.getActivity())) {
             view.requestPhoneStatePermission()
