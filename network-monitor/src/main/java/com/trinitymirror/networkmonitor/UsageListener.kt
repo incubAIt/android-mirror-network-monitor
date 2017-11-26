@@ -72,4 +72,12 @@ data class UsageListener(
                 val rxBytes: Long, val txBytes: Long,
                 val estimatedBytes: Long = -1)
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other?.javaClass != javaClass) return false
+        other as UsageListener
+
+        return other.id == this.id
+    }
 }

@@ -4,6 +4,8 @@ import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Build
+import android.os.Handler
+import android.os.Looper
 import android.os.Process
 import android.support.annotation.RequiresApi
 import android.support.v4.util.SparseArrayCompat
@@ -25,6 +27,7 @@ internal interface UsageCallbackRegister {
     open class Nougat(private val context: Context, private val networkStatsManager: NetworkStatsManager) : UsageCallbackRegister {
 
         private val uid = Process.myUid()
+        private val mainHandler = Handler(Looper.getMainLooper())
         private val networkStatsHelper = NetworkStatsHelper(networkStatsManager)
         protected val usageCallbacksList = SparseArrayCompat<NetworkStatsManager.UsageCallback>()
 
@@ -41,7 +44,7 @@ internal interface UsageCallbackRegister {
             usageCallbacksList.put(listener.id, usageCallback)
 
             networkStatsManager
-                    .registerUsageCallback(networkType, subscriberId, thresholdBytes, usageCallback)
+                    .registerUsageCallback(networkType, subscriberId, thresholdBytes, usageCallback, mainHandler)
         }
 
         private fun mapSubscriberId(listener: UsageListener) =
@@ -77,8 +80,9 @@ internal interface UsageCallbackRegister {
         }
 
         override fun unregisterUsageCallback(listener: UsageListener) {
-            val usageCallback = usageCallbacksList.get(listener.id)
-            networkStatsManager.unregisterUsageCallback(usageCallback)
+            usageCallbacksList.get(listener.id)?.let {
+                networkStatsManager.unregisterUsageCallback(it)
+            }
 
             usageCallbacksList.remove(listener.id)
         }

@@ -3,10 +3,12 @@ package com.trinitymirror.networkmonitor
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import com.trinitymirror.networkmonitor.job.MonitorJob
 import com.trinitymirror.networkmonitor.job.MonitorJobFactory
 import com.trinitymirror.networkmonitor.permission.PermissionHelper
 import com.trinitymirror.networkmonitor.ui.PermissionsDialogActivity
 import com.trinitymirror.networkmonitor.usagecallback.UsageCallbackRegister
+import io.reactivex.schedulers.Schedulers
 import java.lang.ref.SoftReference
 
 /**
@@ -18,13 +20,17 @@ class NetworkMonitor private constructor(
         private val monitorJobFactory: MonitorJobFactory,
         private val permissionHelper: PermissionHelper) {
 
-    internal val networkListeners = mutableListOf<UsageListener>()
+    internal val networkListeners = mutableSetOf<UsageListener>()
 
     private var permissionResultReference: SoftReference<PermissionDialogResult>? = null
 
     fun registerListener(listener: UsageListener) {
-        usageCallbacks.registerUsageCallback(listener)
+        if (networkListeners.contains(listener)) {
+            unregisterListener(listener)
+        }
+
         networkListeners.add(listener)
+        usageCallbacks.registerUsageCallback(listener)
 
         if (networkListeners.size == 1) {
             scheduleJob()
@@ -51,6 +57,12 @@ class NetworkMonitor private constructor(
     fun obtainCurrentStats(params: UsageListener.Params) : UsageListener.Result {
         return NetworkMonitorServiceLocator.provideThresholdVerifier()
                 .createResult(params)
+    }
+
+    fun forceRunMonitorJob() {
+        MonitorJob().execute()
+                .subscribeOn(Schedulers.io())
+                .subscribe()
     }
 
     fun hasPermissions(context: Context)

@@ -20,11 +20,9 @@ class MonitorJob(
             NetworkMonitorServiceLocator.provideThresholdVerifier(),
             NetworkMonitorServiceLocator.provideJobPreferences())
 
-    fun execute(): Completable {
-        return Completable.fromAction { executeAsync() }
-    }
+    fun execute(): Completable = Completable.fromAction { executeSync() }
 
-    private fun executeAsync() {
+    private fun executeSync() {
         Log.d(TAG, "Running network monitor job: ${NetworkMonitor.with().networkListeners}")
 
         NetworkMonitor.with()
@@ -38,7 +36,8 @@ class MonitorJob(
         val lastNotificationTimestamp = jobPreferences.getLastNotificationTimestamp(listener.id)
         val lastPeriod = System.currentTimeMillis() - listener.params.periodInMillis
 
-        return lastPeriod > lastNotificationTimestamp
+        return (lastPeriod > lastNotificationTimestamp)
+                .also { Log.d(TAG, "hasNotTriggeredDuringLastPeriod $it") }
     }
 
     private fun isThresholdReached(listener: UsageListener): Boolean {
