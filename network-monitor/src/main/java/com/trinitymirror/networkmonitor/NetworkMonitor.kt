@@ -3,6 +3,7 @@ package com.trinitymirror.networkmonitor
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import com.trinitymirror.networkmonitor.job.MonitorJob
 import com.trinitymirror.networkmonitor.job.MonitorJobFactory
 import com.trinitymirror.networkmonitor.permission.PermissionHelper
@@ -24,7 +25,14 @@ class NetworkMonitor private constructor(
 
     private var permissionResultReference: SoftReference<PermissionDialogResult>? = null
 
+    /**
+     * Return if NetworkMonitor is supported, according to the current Android API.
+     */
+    fun isSupported() : Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+
     fun registerListener(listener: UsageListener) {
+        checkDeviceSupported()
+
         if (networkListeners.contains(listener)) {
             unregisterListener(listener)
         }
@@ -38,6 +46,8 @@ class NetworkMonitor private constructor(
     }
 
     fun unregisterListener(listener: UsageListener) {
+        checkDeviceSupported()
+
         usageCallbacks.unregisterUsageCallback(listener)
         networkListeners.remove(listener)
 
@@ -47,10 +57,12 @@ class NetworkMonitor private constructor(
     }
 
     fun scheduleJob() {
+        checkDeviceSupported()
         monitorJobFactory.scheduleJob()
     }
 
     fun cancelJob() {
+        checkDeviceSupported()
         monitorJobFactory.cancelJob()
     }
 
@@ -60,6 +72,8 @@ class NetworkMonitor private constructor(
     }
 
     fun forceRunMonitorJob() {
+        checkDeviceSupported()
+
         MonitorJob().execute()
                 .subscribeOn(Schedulers.io())
                 .subscribe()
@@ -93,6 +107,13 @@ class NetworkMonitor private constructor(
         }
 
         return result
+    }
+
+    private fun checkDeviceSupported() {
+        if (!isSupported()) {
+            throw IllegalStateException("Device not supported. " +
+                    "Please check #isSupported before invoking this feature.")
+        }
     }
 
     interface PermissionDialogResult {

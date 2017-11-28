@@ -26,11 +26,6 @@ class PermissionHelper {
                 PackageManager.PERMISSION_GRANTED
     }
 
-    fun requestPhoneStatePermission(activity: Activity, requestCode: Int) {
-        ActivityCompat.requestPermissions(
-                activity, arrayOf(Manifest.permission.READ_PHONE_STATE), requestCode)
-    }
-
     fun hasPermissionToReadNetworkHistory(context: Context): Boolean {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             return true
