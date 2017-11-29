@@ -8,4 +8,6 @@
     <string name="mirror_network_monitor_dialog_dismiss">DISMISS</string>
     <string name="mirror_network_monitor_dialog_next">NEXT</string>
     <string name="mirror_network_monitor_dialog_success">Done</string>
+    <string name="amnm_permission_frame_title">Permit Usage Access</string>
+    <string name="amnm_permission_frame_inside_text">Usage Access</string>
 </resources>

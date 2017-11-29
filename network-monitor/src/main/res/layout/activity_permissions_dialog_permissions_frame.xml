@@ -28,7 +28,7 @@
         android:layout_gravity="bottom|left"
         android:layout_marginBottom="@dimen/amnm_gap_medium_large"
         android:layout_marginLeft="@dimen/amnm_gap_medium"
-        android:text="Permit Usage Access" />
+        android:text="@string/amnm_permission_frame_title" />
 
     <ImageView
         android:id="@+id/mirror_network_monitor_permisssion_frame_icon"
@@ -54,6 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="48dp"
         android:layout_marginTop="10dp"
-        android:text="Usage Access" />
+        android:text="@string/amnm_permission_frame_inside_text" />
 
 </merge>
