@@ -3,6 +3,8 @@ package com.trinitymirror.networkmonitor.usagecallback
 import android.app.usage.NetworkStatsManager
 import android.content.Context
 import android.net.ConnectivityManager
+import android.os.Handler
+import android.os.Looper
 import android.os.RemoteException
 import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
@@ -19,6 +21,7 @@ class UsageCallbackRegisterTest : BaseTest() {
 
     companion object {
         val SUBSCRIBER_ID = "subscriber-id"
+        val handler = Handler(Looper.myLooper())
     }
 
     private val statsManager = mock(NetworkStatsManager::class)
@@ -47,7 +50,8 @@ class UsageCallbackRegisterTest : BaseTest() {
                 ConnectivityManager.TYPE_MOBILE,
                 SUBSCRIBER_ID,
                 listener.params.maxBytesSinceAppRestart,
-                usageCallbackRegister.callbacksList()[id])
+                usageCallbackRegister.callbacksList()[id],
+                handler)
     }
 
     @Test
@@ -64,7 +68,8 @@ class UsageCallbackRegisterTest : BaseTest() {
                 ConnectivityManager.TYPE_WIFI,
                 "",
                 listener.params.maxBytesSinceAppRestart,
-                usageCallbackRegister.callbacksList()[id])
+                usageCallbackRegister.callbacksList()[id],
+                handler)
     }
 
     @Test
@@ -99,7 +104,7 @@ class UsageCallbackRegisterTest : BaseTest() {
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     internal class UsageCallbackRegisterStub(context: Context, statsManager: NetworkStatsManager)
-        : UsageCallbackRegister.Nougat(context, statsManager) {
+        : UsageCallbackRegister.Nougat(context, statsManager, handler) {
 
         override fun getSubscriberId(): String {
             return SUBSCRIBER_ID

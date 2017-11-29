@@ -24,10 +24,10 @@ internal interface UsageCallbackRegister {
     fun unregisterUsageCallback(listener: UsageListener)
 
     @RequiresApi(Build.VERSION_CODES.N)
-    open class Nougat(private val context: Context, private val networkStatsManager: NetworkStatsManager) : UsageCallbackRegister {
+    open class Nougat(private val context: Context, private val networkStatsManager: NetworkStatsManager,
+                      private val mainHandler: Handler = Handler(Looper.getMainLooper())) : UsageCallbackRegister {
 
         private val uid = Process.myUid()
-        private val mainHandler = Handler(Looper.getMainLooper())
         private val networkStatsHelper = NetworkStatsHelper(networkStatsManager)
         protected val usageCallbacksList = SparseArrayCompat<NetworkStatsManager.UsageCallback>()
 

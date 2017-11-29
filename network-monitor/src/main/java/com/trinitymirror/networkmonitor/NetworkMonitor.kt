@@ -19,7 +19,8 @@ import java.lang.ref.SoftReference
 class NetworkMonitor private constructor(
         private val usageCallbacks: UsageCallbackRegister,
         private val monitorJobFactory: MonitorJobFactory,
-        private val permissionHelper: PermissionHelper) {
+        private val permissionHelper: PermissionHelper,
+        private val deviceChecker: DeviceChecker) {
 
     internal val networkListeners = mutableSetOf<UsageListener>()
 
@@ -28,7 +29,7 @@ class NetworkMonitor private constructor(
     /**
      * Return if NetworkMonitor is supported, according to the current Android API.
      */
-    fun isSupported() : Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    fun isSupported() = deviceChecker.isDeviceSupported() // : Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
 
     fun registerListener(listener: UsageListener) {
         checkDeviceSupported()
@@ -121,6 +122,14 @@ class NetworkMonitor private constructor(
         fun onPermissionGranted(): Intent?
     }
 
+    interface DeviceChecker {
+        fun isDeviceSupported(): Boolean
+    }
+
+    class AndroidDeviceChecker : DeviceChecker {
+        override fun isDeviceSupported(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+    }
+
     companion object {
         @Volatile private var INSTANCE: NetworkMonitor? = null
 
@@ -134,7 +143,8 @@ class NetworkMonitor private constructor(
             return NetworkMonitor(
                     NetworkMonitorServiceLocator.provideUsageCallbackRegister(),
                     NetworkMonitorServiceLocator.provideMonitorJobFactory(),
-                    PermissionHelper())
+                    PermissionHelper(),
+                    NetworkMonitorServiceLocator.provideDeviceChecker())
         }
 
         fun reset() {

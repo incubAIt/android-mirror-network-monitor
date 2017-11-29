@@ -24,6 +24,7 @@ object NetworkMonitorServiceLocator {
     private var jobPreferences: JobPreferences? = null
     private var jobExecutionPeriodicity = -1
     private var jobExecutionTolerance = -1
+    private var deviceChecker: NetworkMonitor.DeviceChecker? = null
 
     internal fun provideMonitorJobFactory(): MonitorJobFactory {
         return monitorJobFactory ?:
@@ -59,6 +60,12 @@ object NetworkMonitorServiceLocator {
         return TrafficStatsHelper.Impl()
     }
 
+    internal fun provideDeviceChecker(): NetworkMonitor.DeviceChecker {
+        return deviceChecker ?:
+                NetworkMonitor.AndroidDeviceChecker()
+                        .also { deviceChecker = it }
+    }
+
     class Config(context: Context) {
 
         init {
@@ -83,6 +90,11 @@ object NetworkMonitorServiceLocator {
 
         internal fun withJobPreferences(jobPreferences: JobPreferences): Config {
             NetworkMonitorServiceLocator.jobPreferences = jobPreferences
+            return this
+        }
+
+        internal fun withDeviceChecker(deviceChecker: NetworkMonitor.DeviceChecker): Config {
+            NetworkMonitorServiceLocator.deviceChecker = deviceChecker
             return this
         }
     }

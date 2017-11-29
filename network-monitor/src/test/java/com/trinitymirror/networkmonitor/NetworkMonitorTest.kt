@@ -24,7 +24,6 @@ class NetworkMonitorTest : BaseTest() {
         super.setUp()
         config.withMonitorJobFactory(jobFactory)
                 .withUsageCallbackRegister(usageCallbackRegister)
-
     }
 
     @Test

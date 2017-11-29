@@ -11,6 +11,10 @@ open class BaseTest {
 
     open fun setUp() {
         NetworkMonitor.reset()
-        config = NetworkMonitorServiceLocator.Config(context)
+        config = NetworkMonitorServiceLocator
+                .Config(context)
+                .withDeviceChecker(object : NetworkMonitor.DeviceChecker {
+                    override fun isDeviceSupported() = true
+                })
     }
 }
