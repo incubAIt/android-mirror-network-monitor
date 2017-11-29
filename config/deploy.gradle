@@ -1,0 +1,44 @@
+apply plugin: 'maven'
+
+configurations {
+    deployerJar
+}
+
+uploadArchives {
+    configuration = configurations.archives
+    repositories.mavenDeployer {
+        pom.groupId = GROUP
+        pom.artifactId = POM_ARTIFACT_ID
+        pom.version = VERSION
+        configuration = configurations.deployerJar
+        repository(url: "git:releases://git@bitbucket.org:" +
+                "trinitymirror-ondemand/trinity-maven-respository.git")
+        snapshotRepository(url: "git:snapshots://git@bitbucket.org" +
+                ":trinitymirror-ondemand/trinity-maven-respository.git")
+        pom.project {
+            name POM_NAME
+            packaging POM_PACKAGING
+            description POM_DESCRIPTION
+            url POM_URL
+            scm {
+                url SCM_URL
+                connection SCM_CONNECTION
+                developerConnection SCM_DEVELOPER_CONNECTION
+            }
+            licenses {
+                license {
+                    name LICENSE_NAME
+                    url LICENSE_URL
+                    distribution LICENSE_DISTRIBUTION
+                }
+            }
+            developers {
+                developer {
+                    id DEVELOPER_ID
+                    name DEVELOPER_NAME
+                    email DEVELOPER_EMAIL
+                }
+            }
+        }
+    }
+}

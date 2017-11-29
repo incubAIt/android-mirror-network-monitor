@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+
+    <issue id="IconMissingDensityFolder" severity="warning"/>
+
+    <issue id="HardcodedText" severity="error"/>
+
+    <issue id="EasterEgg" severity="error"/>
+
+    <issue id="IconExpectedSize" severity="warning"/>
+
+    <issue id="UnusedResources" severity="warning"/>
+
+    <issue id="DefaultLocale" severity="warning"/>
+
+</lint>

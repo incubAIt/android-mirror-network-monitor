@@ -6,6 +6,8 @@ buildscript {
     repositories {
         google()
         jcenter()
+        maven { url "https://raw.github.com/synergian/wagon-git/releases"}
+
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.0'

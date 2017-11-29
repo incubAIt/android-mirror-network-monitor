@@ -3,6 +3,9 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 
+apply from: '../config/quality.gradle'
+apply from: '../config/deploy.gradle'
+
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
@@ -41,4 +44,6 @@ dependencies {
 
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+
+    deployerJar 'ar.com.synergian:wagon-git:0.2.3'
 }

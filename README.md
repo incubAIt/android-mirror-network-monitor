@@ -41,26 +41,58 @@ compile 'com.trinitymirror.network-monitor:network-monitor:<latest-version>'
 
 ## Usage
 
-Start by initialising the library at your `Application#onCreate` method:
-
 ```java
-//TODO
+
+class MyApplication extends Application {
+    
+    void onCreate() {
+        // other stuff...
+        
+        // Setup and create listener 
+        new NetworkMonitorServiceLocator.Config(appContext)
+                .withJobExecutionWindow( // optional
+                                (int) TimeUnit.MINUTES.toSeconds(2),
+                                (int) TimeUnit.MINUTES.toSeconds(1));
+        
+        dataTeamListener = new UsageListener(
+                LISTENER_ID_DATA_TEAM, 
+                new UsageListener.Params(
+                        1024 * 1024 * 512,       // 512 Mb
+                        1024 * 1024 * 1024 * 2L, // 2 GB
+                        TimeUnit.DAYS.toMillis(10),
+                        UsageListener.NetworkType.MOBILE, 
+                this::onDataTeamListenerResult));
+        
+        // Register listener
+        final NetworkMonitor networkMonitor = NetworkMonitor.with();
+        if (!networkMonitor.hasPermissions(context)) {
+            Timber.d("NetworkMonitor permissions=false");
+            return;
+        }
+        networkMonitor.registerListener(userListener);
+        
+        // ...
+        // Unregister listener
+        NetworkMonitor.with().unregisterListener(dataTeamListener);
+        
+        // ...
+        // Open permissions dialog
+        NetworkMonitor.with()
+                .openPermissionsDialog(activity,
+                        activity.getString(R.string.app_name),
+                        R.mipmap.ic_launcher_round, permissionDialogResult);
+    }
+    
+}
 ```
 
 ## Backwards compatibility
 
 For backwards compatibility, this library uses:
 
-* API < 23: TrafficStats, resets after phone reboot
+* API < 23: Not supported
 * API >= 23: NetworkStatsManager, check every 2h
 * API >= 24: NetworkStatsManager#registerUsageCallback, resets after app restart
-
-* NetworkStatsCompat:
-
-  * getMobileRx
-  * getMobileTx
-  * getWifiRx
-  * getWifiTx
 
 ## Internals
 
@@ -68,7 +100,6 @@ For backwards compatibility, this library uses:
 
 * Trigger warning after:
 
-  *	X Mb since device reboot (API < 23)
   * X Mb caused by the app, for a particular duration (API >= 23)
   * X Mb since app restart (API >= 24)
 
